@@ -1,0 +1,7 @@
+When using repo-local tools (justfile recipes, vendor CLIs, lsq commands):
+
+1. BEFORE using any just recipe: run `just --list` to identify the correct recipe name, then `just agenthelp <recipe>` to get usage instructions.
+
+2. If a local tool fails: FIX THE TOOL. Do not assume it's broken and seek alternatives. These tools were built for this environment and any failures indicate bugs to be corrected.
+
+3. After resolving issues with a recipe: update help/<recipe>.md and help/<recipe>-compressed.md with lessons learned to prevent future errors.

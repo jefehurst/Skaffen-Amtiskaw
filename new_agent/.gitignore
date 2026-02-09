@@ -1,0 +1,91 @@
+# Nix / direnv
+.direnv/
+.devenv/
+result
+
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# Poetry
+poetry.lock
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Secrets - NEVER commit these
+.env
+.env.*
+local.env
+!.env.example
+*.pem
+*.key
+credentials.json
+secrets.json
+
+# Temporary working files
+tmp/
+scratch/
+
+# Client artifacts (configs, exports, session-specific files)
+**/artifacts/
+
+# Git worktrees for session isolation
+.worktrees/
+
+# Cloud workstation local files
+cloud/.venv/
+
+# User preference files
+.skip-atlassian-setup
+
+# Stage directory (symlink to external staging area)
+stage
+
+# Binary files and large downloads
+*.pdf
+*.bin
+*.zip
+*.tar.gz
+*.tgz
+**/attachments/
+.cache/
+vpn/qemu-test/alpine-virt.qcow2

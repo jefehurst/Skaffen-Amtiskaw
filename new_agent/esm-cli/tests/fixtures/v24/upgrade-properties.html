@@ -1,0 +1,82 @@
+
+
+<script type="application/javascript">
+    $(document).ready(function() { app.adminEnvAddPasswordConfirmation(); })
+</script>
+
+<div id="main" class="admin-main-template-div">
+
+    <!--%@ taglib uri="http://www.owasp.org/index.php/Category:OWASP_CSRFGuard_Project/Owasp.CsrfGuard.tld" prefix="csrf" %>
+
+    <form name="csrf_form" action="protect.html">
+        <input type="hidden" name="<csrf:tokenname/>" value="<csrf:tokenvalue uri="protect.html"/>"/>
+    </form-->
+
+    <div id="admin-env-add-server" >
+        <div class="main-content-header">
+            Rio Hondo College -
+            Environment: NEW-DEV New-DEV Environment
+        </div>
+        <span class="shim"></span>
+
+        <div class="admin-div-scroll">
+
+            <div class="main-content-header">Review and acknowledge the following upgrade-specific instructions and enter any requested parameters.</div>
+            <span class="tiny-shim"></span>
+
+
+                <span class="tiny-shim"></span>
+                <div class="message">
+                    <input class="inline-btn"  type="checkbox" name="adminEnvUpgradeSpecificSections" id="banner.pay83201u.overview"
+                          ></input>
+                    Overview
+                </div>
+                <span class="tiny-shim"></span>
+                <div class="message">
+                    ****************************************<br/>BANNER PAYROLL 8.32.1<br/>****************************************<br/><br/>NOTE:  Any upgrade issues discovered and reported to the ActionLine subsequent<br/>       to the posting of this release will be documented in the &quot;Banner Human Resources 8.32.1 Upgrade Issues&quot;<br/>       Article KB000511055 and made available via the Ellucian Customer Center web site:<br/>       (http://login.ellucian.com).<br/>       It is required that you check this document prior to applying<br/>       the release by querying for Article KB000511055.<br/><br/>***************************************<br/>
+                </div>
+
+
+                <div class="dialog-title"/>
+
+
+
+                <span class="tiny-shim"></span>
+                <div class="message">
+                    <input class="inline-btn"  type="checkbox" name="adminEnvUpgradeSpecificSections" id="banner.pay83201u.self-service"
+                          ></input>
+                    Self-service
+                </div>
+                <span class="tiny-shim"></span>
+                <div class="message">
+                    ***************************************************<br/>BANNER PAYROLL 8.32.1<br/>***************************************************<br/><br/>Banner 8 Self-Service will enter Sustaining Support on October 1, 2025. Sustaining Support will cover ONLY critical vulnerability patches until December 31, 2025. No further updates, including functional defect fixes or regulatory updates will be available after October 1, 2025.<br/>Ellucian strongly recommends customers finalize plans to transition off Banner 8 Self-Service now. Please reach out to your Customer Success Manager with any questions.<br/><br/>
+                </div>
+
+
+                <div class="dialog-title"/>
+
+
+            <span class="tiny-shim"></span>
+        </div>
+
+
+        <div class="btn-container right">
+
+
+                <button class="inline-btn form-btn admin-env-save-upgrade-properties-btn"
+                    target-url="/admin/adminEnv/upgradeSpecificProperties?jobDesc=&envName=NEW-DEV&relVersion=8.32.1&productId=BNR_HRPAY&origin=null&applicationName=null"
+                >Reset</button>
+                <button class="inline-btn form-btn admin-env-save-upgrade-properties-btn"
+                    target-url="/admin/adminEnv/saveUpgradeSpecificProperties?jobDesc=&envName=NEW-DEV&relVersion=8.32.1&productId=BNR_HRPAY&origin=null&applicationName=null"
+                >OK</button>
+
+
+            <button class="inline-btn form-btn admin-env-products-refresh-btn"
+
+                target-url="/admin/adminEnv/installReleasesPrompt?jobDesc=&envName=NEW-DEV"
+
+            >
+            Cancel</button>
+        </div>
+    </div>
+</div>

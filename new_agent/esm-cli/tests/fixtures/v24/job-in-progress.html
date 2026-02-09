@@ -1,0 +1,163 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <link rel="shortcut icon" type="image/x-icon" href="/admin/assets/favicon-5447c6b10b8695d6c971a518a2d4ddc2.ico"/>
+    <title>Ellucian Solution Manager</title>
+    <link rel="stylesheet" href="/admin/assets/jquery-ui-1.10.4-0d6378a5e9faef72778d41a1537fdb7a.css" />
+    <link rel="stylesheet" href="/admin/assets/adminMain-0ac819eff1874d9a8c3d4fbdc1bba1a9.css" />
+    <script type="text/javascript" src="/admin/assets/adminMain-c244d15c78c6119dbbd7da7e5cccfdda.js" ></script>
+    <script type="text/javascript" src="/admin/assets/jquery-ui-1.10.4-04c2ce783e38c8c1a8d2b921502ec1f6.js" ></script>
+
+    <meta name="_csrf" content="950dd29c-2d64-459f-afbd-87cb36726ac3"/>
+    <!-- default header name is X-CSRF-TOKEN -->
+    <meta name="_csrf_header" content="X-XSRF-TOKEN"/>
+
+
+        <meta name="layout" content="adminHeaderFooter">
+
+
+</head>
+<body>
+
+<div id="app" class="gridContainer clearfix">
+    <!--------------------------------------------------------------------------->
+    <!-- HEADER -->
+    <!--------------------------------------------------------------------------->
+    <div id="header">
+        <img src="/admin/assets/e-logo-lg-74cf32860194238bc9e877f2b5a62be0.png" class="e-logo"/>
+        <img src="/admin/assets/logo-ellucian-d0189865bf95a624ee7da66b8be733fc.png" width="82" height="18" class="full-logo"/>
+        <ul id="global-links">
+
+            <li>
+                <!--Url converted to use a post to satisfy spring security logout requirements-->
+                <form id="formSignOut" method="POST" action="/admin/logout/index">
+                    <input type="hidden" name="_csrf" value="950dd29c-2d64-459f-afbd-87cb36726ac3"/>
+
+                    <a class="sign-out" href="javascript:document.getElementById('formSignOut').submit();">
+                        Sign Out (admin)
+                    </a>
+                </form>
+            </li>
+            <li>
+                <a class="license" target="_blank" href="/admin/adminMain/adminLicense">
+                    About
+                </a>
+            </li>
+
+            <li>
+                <a target="_esmadminhelp" href="/admin/help/help" class="help">
+                    Help
+                </a>
+            </li>
+        </ul>
+        <a id="hidden-timeout-link" href="/admin/adminMain/index"></a>
+        <h1 class="header-label">
+            ELLUCIAN SOLUTION MANAGER 24.2
+            (BUILD 20241122.181411</font>)
+        </h1>
+    </div>
+
+    <input type="hidden" id="scrollPos" value="" />
+        <div id="ajax-spinner"></div>
+        <div id="main">
+          <div>
+            <span class="small-shim"></span>
+            <div class="main-content-header">Rio Hondo College -
+                    Environment: NEW-DEV New-DEV Environment -
+                    Upgrade Monitor: 1765032377780 EXAMPLE_DESCRIPTION
+            </div>
+            <span class="medium-shim"></span>
+
+            <div class="btn-container right">
+                <label>Auto Refresh (secs)</label>
+                <input id="jobMonitorRefreshIntervalFld" type="text" size="2" value="30"/>
+                <button class="admin-main-job-monitor-refresh" id="admin-main-job-monitor-refresh" onclick="clearTimer()"
+                    target-url="/admin/adminEnv/upgradeMonitor?envName=NEW-DEV&installId=1765032377780"
+                >Refresh</button>
+
+            </div>
+            <span class="medium-shim"></span>
+            <div class="dialog-title">Job Name: NEW-DEV_instJob_1765032377780_InstallSoftware</div>
+            <span class="tiny-shim"></span>
+
+                <div>
+                    Status:
+
+                        <div class="td-status"><div class="icon-in-progress" title="In Progress"></div></div>
+
+                </div>
+                <span class="tiny-shim"></span>
+                <div>
+                    Start Time: Sat Dec 06 06:46:26 PST 2025
+                </div>
+                <span class="tiny-shim"></span>
+                <div>
+                    Duration: 1 sec
+                </div>
+                <span class="medium-shim"></span>
+                <div class="ui-widget-header">Console Log</div>
+                <span class="tiny-shim"></span>
+                <div class="admin-div-scroll" id="admin-div-scroll">
+                    <pre id="out" class="console-output"></pre>
+                </div>
+
+            <span class="medium-shim"></span>
+            <div class="btn-container">Last Refreshed: Sat Dec 06 06:47:47 PST 2025</div>
+            <span class="medium-shim"></span>
+          </div>
+        </div>
+    <script type="text/javascript">
+
+        function updateScroll(){
+            var position = document.getElementById('scrollPos').value;
+            if(position != "") {
+                $("#admin-div-scroll").scrollTop(position);
+            } else {
+                $("#admin-div-scroll").scrollTop($("#admin-div-scroll").prop("scrollHeight"));
+            }
+        }
+
+        $("#admin-div-scroll").on('scroll', function() {
+            var scrollPosObj = document.getElementById('scrollPos');
+            var scrollPos = setTimeout(scrollPosObj.value, 250);
+            var myDiff = $("#admin-div-scroll").prop("scrollHeight") - $("#admin-div-scroll").scrollTop();
+            if (myDiff < 1200) {
+                scrollPosObj.value = "";
+            } else {
+                scrollPosObj.value = $("#admin-div-scroll").scrollTop();
+            }
+        });
+
+        var timer;
+        $(document).ready(function() {
+            updateScroll();
+
+            var timeEnd = 0;
+            var curTime = 0;
+            curTime = (new Date()).getTime();
+            timeEnd = curTime + 30000;
+
+            timer = setInterval(checkRefresh, 1000);
+            function checkRefresh() {
+                curTime = (new Date()).getTime();
+                if (curTime >= timeEnd) {
+                    curTime = 0;
+                    $("#admin-main-job-monitor-refresh").click();
+                }
+            }
+        });
+
+        function clearTimer() {
+            clearInterval(timer);
+        }
+    </script>
+
+
+</div>
+
+</body>
+</html>

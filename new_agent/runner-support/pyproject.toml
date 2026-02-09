@@ -1,0 +1,28 @@
+[project]
+name = "runner-support"
+version = "0.1.0"
+description = "CLI and API client for Runner Technologies Support"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "httpx>=0.28.1,<0.29.0",
+    "typer>=0.15.0,<0.16.0",
+    "rich>=14.0.0,<15.0.0",
+]
+
+[project.scripts]
+runner-support = "runner_support.cli:main"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+package-mode = true
+packages = [{include = "runner_support", from = "src"}]
+
+[tool.black]
+line-length = 100
+
+[tool.ruff]
+line-length = 100

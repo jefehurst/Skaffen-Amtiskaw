@@ -1,0 +1,457 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <link rel="shortcut icon" type="image/x-icon" href="/admin/assets/favicon-5447c6b10b8695d6c971a518a2d4ddc2.ico"/>
+    <title>Ellucian Solution Manager</title>
+    <link rel="stylesheet" href="/admin/assets/jquery-ui-1.10.4-0d6378a5e9faef72778d41a1537fdb7a.css" />
+    <link rel="stylesheet" href="/admin/assets/adminMain-0ac819eff1874d9a8c3d4fbdc1bba1a9.css" />
+    <script type="text/javascript" src="/admin/assets/adminMain-c244d15c78c6119dbbd7da7e5cccfdda.js" ></script>
+    <script type="text/javascript" src="/admin/assets/jquery-ui-1.10.4-04c2ce783e38c8c1a8d2b921502ec1f6.js" ></script>
+
+    <meta name="_csrf" content="950dd29c-2d64-459f-afbd-87cb36726ac3"/>
+    <!-- default header name is X-CSRF-TOKEN -->
+    <meta name="_csrf_header" content="X-XSRF-TOKEN"/>
+
+
+        <meta name="layout" content="adminHeaderFooter">
+
+
+</head>
+<body>
+
+<div id="app" class="gridContainer clearfix">
+    <!--------------------------------------------------------------------------->
+    <!-- HEADER -->
+    <!--------------------------------------------------------------------------->
+    <div id="header">
+        <img src="/admin/assets/e-logo-lg-74cf32860194238bc9e877f2b5a62be0.png" class="e-logo"/>
+        <img src="/admin/assets/logo-ellucian-d0189865bf95a624ee7da66b8be733fc.png" width="82" height="18" class="full-logo"/>
+        <ul id="global-links">
+
+            <li>
+                <!--Url converted to use a post to satisfy spring security logout requirements-->
+                <form id="formSignOut" method="POST" action="/admin/logout/index">
+                    <input type="hidden" name="_csrf" value="950dd29c-2d64-459f-afbd-87cb36726ac3"/>
+
+                    <a class="sign-out" href="javascript:document.getElementById('formSignOut').submit();">
+                        Sign Out (admin)
+                    </a>
+                </form>
+            </li>
+            <li>
+                <a class="license" target="_blank" href="/admin/adminMain/adminLicense">
+                    About
+                </a>
+            </li>
+
+            <li>
+                <a target="_esmadminhelp" href="/admin/help/help" class="help">
+                    Help
+                </a>
+            </li>
+        </ul>
+        <a id="hidden-timeout-link" href="/admin/adminMain/index"></a>
+        <h1 class="header-label">
+            ELLUCIAN SOLUTION MANAGER 24.2
+            (BUILD 20241122.181411</font>)
+        </h1>
+    </div>
+
+    <input type="hidden" id="scrollPos" value="" />
+        <div id="ajax-spinner"></div>
+        <div id="main">
+          <div>
+            <span class="small-shim"></span>
+            <div class="main-content-header">Rio Hondo College -
+                    Environment: NEW-DEV New-DEV Environment -
+                    Upgrade Monitor: 1765032377780 EXAMPLE_DESCRIPTION
+            </div>
+            <span class="medium-shim"></span>
+
+            <div class="btn-container right">
+                <label>Auto Refresh (secs)</label>
+                <input id="jobMonitorRefreshIntervalFld" type="text" size="2" value="30"/>
+                <button class="admin-main-job-monitor-refresh" id="admin-main-job-monitor-refresh" onclick="clearTimer()"
+                    target-url="/admin/adminEnv/upgradeMonitor?envName=NEW-DEV&installId=1765032377780"
+                >Refresh</button>
+
+            </div>
+            <span class="medium-shim"></span>
+            <div class="dialog-title">Job Name: NEW-DEV_instJob_1765032377780_InstallSoftware</div>
+            <span class="tiny-shim"></span>
+
+                <div>
+                    Status:
+
+
+                            <div class="td-status"><div class="icon-success" title="Complete"></div></div>
+
+
+                </div>
+                <span class="tiny-shim"></span>
+                <div>
+                    Start Time: Sat Dec 06 06:46:26 PST 2025
+                </div>
+                <span class="tiny-shim"></span>
+                <div>
+                    Duration: 12 min 25 sec
+                </div>
+                <span class="medium-shim"></span>
+                <div class="ui-widget-header">Console Log</div>
+                <span class="tiny-shim"></span>
+                <div class="admin-div-scroll" id="admin-div-scroll">
+                    <pre class="console-output">Started by user <a href='/user/admin' class='jenkins-table__link model-link model-link--float'>admin</a>
+Running as SYSTEM
+Building remotely on <a href='/computer/dev_banjobs_bmui_agent/' class='jenkins-table__link model-link model-link--float'>dev_banjobs_bmui_agent</a> in workspace /u01/dev_banjobs_bmui_agent/workspace/NEW-DEV_instJob_1765032377780_InstallSoftware
+[NEW-DEV_instJob_1765032377780_InstallSoftware] $ /bin/sh -xe /tmp/jenkins8552728295548845477.sh
++ rm -rf '*'
+[NEW-DEV_instJob_1765032377780_InstallSoftware] $ /bin/sh -xe /tmp/jenkins3972257898734461583.sh
++ curl -f -u scripting:**** -o install.zip '<a href='https://esm-sig.riohondo.edu:8081/admin/scripts/bmuiScriptBundle?envName=NEW-DEV&amp;bundleName=InstallSoftware&amp;jobId=1765032377780'>https://esm-sig.riohondo.edu:8081/admin/scripts/bmuiScriptBundle?envName=NEW-DEV&amp;bundleName=InstallSoftware&amp;jobId=1765032377780</a>'
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:--  0:00:01 --:--:--     0  0     0    0     0    0     0      0      0 --:--:--  0:00:02 --:--:--     0100 2684k    0 2684k    0     0   880k      0 --:--:--  0:00:03 --:--:--  880k
+[NEW-DEV_instJob_1765032377780_InstallSoftware] $ /bin/sh -xe /tmp/jenkins12022002772556576441.sh
++ unzip install.zip
+Archive:  install.zip
+  inflating: esmGetFromWeb.ps1
+  inflating: main.sh
+  inflating: main.cmd
+  inflating: install.properties
+  inflating: UpgradeInstaller/bmui.jar
+  inflating: UpgradeInstaller/versions.sql
+  inflating: UpgradeInstaller/unlded.shl
+  inflating: UpgradeInstaller/unlded-2.3.shl
+  inflating: UpgradeInstaller/inst/deletetrz.inst
+  inflating: UpgradeInstaller/inst/deployment_ssb.inst
+  inflating: UpgradeInstaller/inst/deployments.inst
+  inflating: UpgradeInstaller/inst/formscompile.inst
+  inflating: UpgradeInstaller/inst/getpatchversions.inst
+  inflating: UpgradeInstaller/inst/getversions.inst
+  inflating: UpgradeInstaller/inst/insertpatchversions.inst
+  inflating: UpgradeInstaller/inst/login_formscompile.inst
+  inflating: UpgradeInstaller/inst/login_target.inst
+  inflating: UpgradeInstaller/inst/odsprebxe.inst
+  inflating: UpgradeInstaller/inst/post_inst_upgrade_code.inst
+  inflating: UpgradeInstaller/inst/post_inst_upgrade_db.inst
+  inflating: UpgradeInstaller/inst/post_upgrade.inst
+  inflating: UpgradeInstaller/inst/pre_inst_upgrade.inst
+  inflating: UpgradeInstaller/inst/pre_upgrade.inst
+  inflating: UpgradeInstaller/inst/products.properties
+  inflating: UpgradeInstaller/inst/sendstatus.inst
+  inflating: UpgradeInstaller/inst/ssb.inst
+  inflating: UpgradeInstaller/inst/val.test
+  inflating: UpgradeInstaller/inst/formostype.inst
+  inflating: UpgradeInstaller/inst/ostype.inst
+  inflating: UpgradeInstaller/inst/winenvset.inst
+  inflating: UpgradeInstaller/inst/winformpath.inst
+  inflating: UpgradeInstaller/inst/winforms.inst
+  inflating: UpgradeInstaller/inst/winpath.inst
+  inflating: UpgradeInstaller/inst/winssbpath.inst
+  inflating: UpgradeInstaller/inst/winsshpath.inst
+  inflating: UpgradeInstaller/inst/winccomp.inst
+  inflating: UpgradeInstaller/inst/wincobcomp.inst
+  inflating: UpgradeInstaller/inst/check_for_mep.inst
+  inflating: UpgradeInstaller/inst/check_optional_upgrade_mep.inst
+  inflating: UpgradeInstaller/inst/mep_all_security.inst
+  inflating: UpgradeInstaller/inst/perform_mep.inst
+  inflating: UpgradeInstaller/inst/link.inst
+  inflating: UpgradeInstaller/inst/edit_package.inst
+  inflating: UpgradeInstaller/inst/getlocalizationversion.inst
+  inflating: UpgradeInstaller/inst/replace_sys_system.inst
+  inflating: UpgradeInstaller/inst/edit_lang_package.inst
+  inflating: UpgradeInstaller/inst/gurwapp_prod_list.inst
+  inflating: UpgradeInstaller/inst/error_patterns.inst
+  inflating: AvailableUpgrades/releasemap.release
+[NEW-DEV_instJob_1765032377780_InstallSoftware] $ /bin/sh -xe /tmp/jenkins197166508853944779.sh
++ chmod +x main.sh
+[NEW-DEV_instJob_1765032377780_InstallSoftware] $ /bin/sh -xe /tmp/jenkins5023320186309315070.sh
++ ./main.sh
+Setting JAVA Paths
+JAVA_HOME = /usr/lib/jvm/java-21
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100  8969    0  8969    0     0   265k      0 --:--:-- --:--:-- --:--:--  265k
+Archive:  gen82500u.zip
+  inflating: gen82500u.inst
+  inflating: gen82500u.json
+  inflating: gen82500u.prop
+  inflating: perform_mep_2023.inst
+copying artifact files into location
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:--  0:00:01 --:--:--     0  0     0    0     0    0     0      0      0 --:--:--  0:00:02 --:--:--     0  0     0    0     0    0     0      0      0 --:--:--  0:00:03 --:--:--     0  0     0    0     0    0     0      0      0 --:--:--  0:00:03 --:--:--     0100 49.3M    0 49.3M    0     0  13.2M      0 --:--:--  0:00:03 --:--:-- 13.2M
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   244    0   244    0     0   4784      0 --:--:-- --:--:-- --:--:--  4784
+
+Initiating BMUI installer ...
+BMUI completed with status: 0
+
+******************** BMUI Summary Log ********************
+
+
+Beginning installation at:Sat_Dec_06_06_46_37_PST_2025
+
+
+The Job-ID is : 1765032377780
+
+The Job-Name is : EXAMPLE_DESCRIPTION
+
+
+
+BMUI version: 24.1-20240207.150019
+
+
+WARNING: Value of banner.deployment.staging.ban8help not found
+
+WARNING: Value of banner.deployment.staging.ban9help not found
+
+WARNING: Value of parameter.upgrades.run.last not found
+
+WARNING: Value of banner.login.UPGRADE_BAN_PASS_SCHEMA_FILE_PATH not found
+
+
+The following upgrades have been selected for installation.
+###########################################################
+general 8.25
+###########################################################
+
+
+
+
+###############################################
+
+Final Install Order:
+--------------------
+INSTALL:general 8.25
+
+###############################################
+
+
+
+Starting upgrade general 8.25
+
+Executing gen82500u step. Refer sendstatus_gen82500u.log
+
+
+Executing gen82500u step. Refer pre_upgrade_gen82500u.log
+
+
+Executing pre_db step. Refer gen82500u_pre_db.log
+
+
+Executing UPGRADE_PREP step. Refer gen82500u_UPGRADE_PREP.log
+
+
+Executing gen82500u step. Refer pre_inst_upgrade_gen82500u.log
+
+
+Executing CHECK_MEP step. Refer gen82500u_CHECK_MEP.log
+
+
+Executing ruready step. Refer gen82500u_ruready.log
+
+
+Executing custom_driver_before_gostage_1 step. Refer gen82500u_custom_driver_before_gostage_1.log
+
+
+Executing import_dump_1 step. Refer gen82500u_import_dump_1.log
+
+
+Executing guovmods step. Refer gen82500u_guovmods.log
+
+
+Executing gurutlrp_1 step. Refer gen82500u_gurutlrp_1.log
+
+
+Executing gurutlrp_1_scan step. Refer gen82500u_gurutlrp_1_scan.log
+
+
+Executing gostage_1 step. Refer gen82500u_gostage_1.log
+
+
+Executing gostage_scan_1 step. Refer gen82500u_gostage_scan_1.log
+
+
+Executing import_dump_2 step. Refer gen82500u_import_dump_2.log
+
+
+Executing gostage_2 step. Refer gen82500u_gostage_2.log
+
+
+Executing gostage_scan_2 step. Refer gen82500u_gostage_scan_2.log
+
+
+Executing TRANSLATIONS step. Refer gen82500u_TRANSLATIONS.log
+
+
+Executing gurutlrp_2 step. Refer gen82500u_gurutlrp_2.log
+
+
+Executing gurutlrp_2 step. Refer gen82500u_gurutlrp_2.log
+
+
+Executing gurscls step. Refer gen82500u_gurscls.log
+
+
+Executing rudone step. Refer gen82500u_rudone.log
+
+
+Executing update_version_hisory step. Refer gen82500u_update_version_hisory.log
+
+
+Executing grestrigs step. Refer gen82500u_grestrigs.log
+
+
+Executing resroled step. Refer gen82500u_resroled.log
+
+
+Executing post_db step. Refer gen82500u_post_db.log
+
+
+Executing gen82500u step. Refer post_inst_upgrade_db_gen82500u.log
+
+
+Executing pre_code step. Refer gen82500u_pre_code.log
+
+
+Executing edit_BatchSecurity step. Refer gen82500u_edit_BatchSecurity.log
+
+
+Executing migration step. Refer gen82500u_migration.log
+
+
+Executing scanning_migr_log_files step. Refer gen82500u_scanning_migr_log_files.log
+
+
+
+
+Executing CLOSE# step. Refer gen82500u_CLOSE#.log
+
+
+Executing mass_comp step. Refer gen82500u_mass_comp.log
+
+
+Executing windows_ccomp step. Refer gen82500u_windows_ccomp.log
+
+
+Executing c_compilation step. Refer gen82500u_c_compilation.log
+
+Warnings found during c compilation step
+The Following Compilation Errors were found in the C Compile log file (gccomp.log):
+-----------------------------------------------------------------------------------
+
+
+-----------------------------------------------------------------------------------
+
+
+
+Executing windows_cobcomp step. Refer gen82500u_windows_cobcomp.log
+
+
+Executing cob_compilation step. Refer gen82500u_cob_compilation.log
+
+
+Executing run_BatchSecurity step. Refer gen82500u_run_BatchSecurity.log
+
+
+Executing post_code step. Refer gen82500u_post_code.log
+
+
+Executing gen82500u step. Refer post_inst_upgrade_code_gen82500u.log
+
+
+Executing gen82500u step. Refer post_upgrade_gen82500u.log
+
+
+Executing gen82500u step. Refer deployments_gen82500u.log
+
+Upgrade general 8.25 has completed successfully
+
+Executing gen82500u step. Refer sendstatus_gen82500u.log
+
+
+Executing gen82500u_deletetrz step. Refer deletetrz_gen82500u_deletetrz.log
+
+
+
+
+***********************************************
+
+
+Setup complete with exit status: 0
+For more logs please refer to /u01/app/sghe/PLAS/bmui/logs/1765032377780
+Ending installation at:Sat Dec 06 06:58:55 PST 2025
+
+***********************************************
+
+
+
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   242    0   242    0     0   5902      0 --:--:-- --:--:-- --:--:--  5902
+BMUI upgrade task completed with status: 0
+Finished: SUCCESS
+</pre>
+                </div>
+
+            <span class="medium-shim"></span>
+            <div class="btn-container">Last Refreshed: Sat Dec 06 07:01:03 PST 2025</div>
+            <span class="medium-shim"></span>
+          </div>
+        </div>
+    <script type="text/javascript">
+
+        function updateScroll(){
+            var position = document.getElementById('scrollPos').value;
+            if(position != "") {
+                $("#admin-div-scroll").scrollTop(position);
+            } else {
+                $("#admin-div-scroll").scrollTop($("#admin-div-scroll").prop("scrollHeight"));
+            }
+        }
+
+        $("#admin-div-scroll").on('scroll', function() {
+            var scrollPosObj = document.getElementById('scrollPos');
+            var scrollPos = setTimeout(scrollPosObj.value, 250);
+            var myDiff = $("#admin-div-scroll").prop("scrollHeight") - $("#admin-div-scroll").scrollTop();
+            if (myDiff < 1200) {
+                scrollPosObj.value = "";
+            } else {
+                scrollPosObj.value = $("#admin-div-scroll").scrollTop();
+            }
+        });
+
+        var timer;
+        $(document).ready(function() {
+            updateScroll();
+
+            var timeEnd = 0;
+            var curTime = 0;
+            curTime = (new Date()).getTime();
+            timeEnd = curTime + 30000;
+
+            timer = setInterval(checkRefresh, 1000);
+            function checkRefresh() {
+                curTime = (new Date()).getTime();
+                if (curTime >= timeEnd) {
+                    curTime = 0;
+                    $("#admin-main-job-monitor-refresh").click();
+                }
+            }
+        });
+
+        function clearTimer() {
+            clearInterval(timer);
+        }
+    </script>
+
+
+</div>
+
+</body>
+</html>

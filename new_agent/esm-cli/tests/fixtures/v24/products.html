@@ -1,0 +1,2449 @@
+
+
+<div id="main" class="admin-main-template-div">
+
+    <!--%@ taglib uri="http://www.owasp.org/index.php/Category:OWASP_CSRFGuard_Project/Owasp.CsrfGuard.tld" prefix="csrf" %>
+
+    <form name="csrf_form" action="protect.html">
+        <input type="hidden" name="<csrf:tokenname/>" value="<csrf:tokenvalue uri="protect.html"/>"/>
+    </form-->
+
+    <div id="admin-env-products" >
+        <div class="main-content-header">
+            Rio Hondo College - Environment: NEW-DEV New-DEV Environment
+        </div>
+        <span class="shim"></span>
+
+
+        <div id="env-list" name="products-scroll-lock" class="admin-div-scroll">
+            <script type="text/javascript">$(function(){app.quickFixedHeaderTable();})</script>
+            <table class="simple-table">
+            <thead><tr>
+                <th>Name</th>
+                <th style="display:none;">Type</th>
+                <th style="display:none;">Application</th>
+                <th>Current Installed Release</th>
+                <th>Latest Available Release</th>
+                <th>Selected Target Release</th>
+            </tr></thead>
+            <tbody>
+
+
+
+
+
+
+
+                <tr>
+                    <td>Solution Manager Upgrade Configuration Verification</td>
+                    <td style="display:none;">esm</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td/>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="ESM_UPGCFVER"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=ESM_UPGCFVER&applicationName=dev-db"
+                        >
+                            1.1
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="ESM_UPGCFVER"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=ESM_UPGCFVER&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner 9 Online Help</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td/>
+
+
+                        <td/>
+                        <td/>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner 9x Database Upgrade</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td class="td-action admin-env-products-table-installed" envName="NEW-DEV" prodId="BXE_DBU"
+                            target-url="/admin/adminEnv/installedReleases?envName=NEW-DEV&productId=BXE_DBU&applicationName=dev-db"
+                        >
+                            9.38.1
+
+                        </td>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_DBU"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_DBU&applicationName=dev-db"
+                        >
+                            9.40.2
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_DBU"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_DBU&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Access Management</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td class="td-action admin-env-products-table-installed" envName="NEW-DEV" prodId="BNR_ACCESSMGMT"
+                            target-url="/admin/adminEnv/installedReleases?envName=NEW-DEV&productId=BNR_ACCESSMGMT&applicationName=dev-db"
+                        >
+                            9.3.30.1.2
+
+                        </td>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BNR_ACCESSMGMT"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BNR_ACCESSMGMT&applicationName=dev-db"
+                        >
+                            9.3.32.1.2
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BNR_ACCESSMGMT"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BNR_ACCESSMGMT&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Accounts Receivable</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td class="td-action admin-env-products-table-installed" envName="NEW-DEV" prodId="BNR_AR"
+                            target-url="/admin/adminEnv/installedReleases?envName=NEW-DEV&productId=BNR_AR&applicationName=dev-db"
+                        >
+                            9.3.30.0.4
+
+                        </td>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BNR_AR"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BNR_AR&applicationName=dev-db"
+                        >
+                            9.3.31.2.2
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BNR_AR"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BNR_AR&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Admin Business Process API</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td class="td-action admin-env-products-table-installed" envName="NEW-DEV" prodId="BNR_ADMBPAPI"
+                            target-url="/admin/adminEnv/installedReleases?envName=NEW-DEV&productId=BNR_ADMBPAPI&applicationName=dev-db"
+                        >
+                            9.3.38.1.1
+
+                        </td>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BNR_ADMBPAPI"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BNR_ADMBPAPI&applicationName=dev-db"
+                        >
+                            9.3.40.1.2
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BNR_ADMBPAPI"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BNR_ADMBPAPI&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Admin Common</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td class="td-action admin-env-products-table-installed" envName="NEW-DEV" prodId="BNR_ADMCOM"
+                            target-url="/admin/adminEnv/installedReleases?envName=NEW-DEV&productId=BNR_ADMCOM&applicationName=dev-db"
+                        >
+                            9.3.39.2.2
+
+                        </td>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BNR_ADMCOM"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BNR_ADMCOM&applicationName=dev-db"
+                        >
+                            9.3.40.2.2
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BNR_ADMCOM"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BNR_ADMCOM&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Application Navigator</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td class="td-action admin-env-products-table-installed" envName="NEW-DEV" prodId="BXE_APPNAV"
+                            target-url="/admin/adminEnv/installedReleases?envName=NEW-DEV&productId=BXE_APPNAV&applicationName=dev-db"
+                        >
+                            3.18.1
+
+                        </td>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_APPNAV"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_APPNAV&applicationName=dev-db"
+                        >
+                            3.20.1
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_APPNAV"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_APPNAV&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Communication Management</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td/>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_BCM"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_BCM&applicationName=dev-db"
+                        >
+                            9.20.1
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_BCM"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_BCM&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Document Management API</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td/>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_BDM"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_BDM&applicationName=dev-db"
+                        >
+                            9.12.1
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_BDM"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_BDM&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Document Management System</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td class="td-action admin-env-products-table-installed" envName="NEW-DEV" prodId="BNR_DMS"
+                            target-url="/admin/adminEnv/installedReleases?envName=NEW-DEV&productId=BNR_DMS&applicationName=dev-db"
+                        >
+                            9.3.2.0.3
+
+                        </td>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BNR_DMS"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BNR_DMS&applicationName=dev-db"
+                        >
+                            9.3.9.0.5
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BNR_DMS"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BNR_DMS&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Employee Profile App (obsolete)</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td/>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_EPA"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_EPA&applicationName=dev-db"
+                        >
+                            9.1
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_EPA"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_EPA&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Employee Self-Service</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td class="td-action admin-env-products-table-installed" envName="NEW-DEV" prodId="BNR_EMPSS"
+                            target-url="/admin/adminEnv/installedReleases?envName=NEW-DEV&productId=BNR_EMPSS&applicationName=dev-db"
+                        >
+                            8.25
+
+                        </td>
+
+
+                        <td/>
+                        <td/>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Employee Self-Service</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td class="td-action admin-env-products-table-installed" envName="NEW-DEV" prodId="BXE_EMPSS"
+                            target-url="/admin/adminEnv/installedReleases?envName=NEW-DEV&productId=BXE_EMPSS&applicationName=dev-db"
+                        >
+                            9.30.1
+
+                        </td>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_EMPSS"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_EMPSS&applicationName=dev-db"
+                        >
+                            9.32.2
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_EMPSS"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_EMPSS&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Ethos API DB Upgrade</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td class="td-action admin-env-products-table-installed" envName="NEW-DEV" prodId="BXE_APIDB"
+                            target-url="/admin/adminEnv/installedReleases?envName=NEW-DEV&productId=BXE_APIDB&applicationName=dev-db"
+                        >
+                            9.29
+
+                        </td>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_APIDB"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_APIDB&applicationName=dev-db"
+                        >
+                            9.30.0.3
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_APIDB"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_APIDB&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Event Publisher</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td class="td-action admin-env-products-table-installed" envName="NEW-DEV" prodId="BXE_BEP"
+                            target-url="/admin/adminEnv/installedReleases?envName=NEW-DEV&productId=BXE_BEP&applicationName=dev-db"
+                        >
+                            9.17.1
+
+                        </td>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_BEP"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_BEP&applicationName=dev-db"
+                        >
+                            9.19.1
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_BEP"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_BEP&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Event Publisher Database Upgrade</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td class="td-action admin-env-products-table-installed" envName="NEW-DEV" prodId="BXE_BEPDB"
+                            target-url="/admin/adminEnv/installedReleases?envName=NEW-DEV&productId=BXE_BEPDB&applicationName=dev-db"
+                        >
+                            9.6
+
+                        </td>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_BEPDB"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_BEPDB&applicationName=dev-db"
+                        >
+                            9.7
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_BEPDB"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_BEPDB&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Extensibility</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td/>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_BEXT"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_BEXT&applicationName=dev-db"
+                        >
+                            9.22.1
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_BEXT"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_BEXT&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Faculty and Advisor Self-Service</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td class="td-action admin-env-products-table-installed" envName="NEW-DEV" prodId="BNR_FACSS"
+                            target-url="/admin/adminEnv/installedReleases?envName=NEW-DEV&productId=BNR_FACSS&applicationName=dev-db"
+                        >
+                            8.7.2.9
+
+                        </td>
+
+
+                        <td/>
+                        <td/>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Faculty Attendance Tracking Self Service (obsolete)</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td/>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_FCATSS"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_FCATSS&applicationName=dev-db"
+                        >
+                            9.3.1
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_FCATSS"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_FCATSS&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Faculty Grade Entry (obsolete)</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td/>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_FCGE"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_FCGE&applicationName=dev-db"
+                        >
+                            9.5.0.3
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_FCGE"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_FCGE&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Faculty Self-Service</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td class="td-action admin-env-products-table-installed" envName="NEW-DEV" prodId="BXE_FACSS"
+                            target-url="/admin/adminEnv/installedReleases?envName=NEW-DEV&productId=BXE_FACSS&applicationName=dev-db"
+                        >
+                            9.28.1
+
+                        </td>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_FACSS"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_FACSS&applicationName=dev-db"
+                        >
+                            9.30.1
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_FACSS"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_FACSS&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Financial Aid</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td class="td-action admin-env-products-table-installed" envName="NEW-DEV" prodId="BNR_FINAID"
+                            target-url="/admin/adminEnv/installedReleases?envName=NEW-DEV&productId=BNR_FINAID&applicationName=dev-db"
+                        >
+                            9.3.52.1.1
+
+                        </td>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BNR_FINAID"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BNR_FINAID&applicationName=dev-db"
+                        >
+                            9.3.55.0.2
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BNR_FINAID"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BNR_FINAID&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Financial Aid Self-Service</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td class="td-action admin-env-products-table-installed" envName="NEW-DEV" prodId="BNR_FINAIDSS"
+                            target-url="/admin/adminEnv/installedReleases?envName=NEW-DEV&productId=BNR_FINAIDSS&applicationName=dev-db"
+                        >
+                            8.51.1
+
+                        </td>
+
+
+                        <td/>
+                        <td/>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner General</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td class="td-action admin-env-products-table-installed" envName="NEW-DEV" prodId="BNR_GEN"
+                            target-url="/admin/adminEnv/installedReleases?envName=NEW-DEV&productId=BNR_GEN&applicationName=dev-db"
+                        >
+                            9.3.35.0.6
+
+                        </td>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BNR_GEN"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BNR_GEN&applicationName=dev-db"
+                        >
+                            9.3.36.2.1
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BNR_GEN"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BNR_GEN&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner General Event Management (obsolete)</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td/>
+
+
+                        <td/>
+                        <td/>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner General Event Management Self Service</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td/>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_EVMGTSS"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_EVMGTSS&applicationName=dev-db"
+                        >
+                            9.24.1
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_EVMGTSS"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_EVMGTSS&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner General Self Service</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td class="td-action admin-env-products-table-installed" envName="NEW-DEV" prodId="BXE_GENSS"
+                            target-url="/admin/adminEnv/installedReleases?envName=NEW-DEV&productId=BXE_GENSS&applicationName=dev-db"
+                        >
+                            9.21.1
+
+                        </td>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_GENSS"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_GENSS&applicationName=dev-db"
+                        >
+                            9.23.1
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_GENSS"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_GENSS&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner HR and Payroll</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td class="td-action admin-env-products-table-installed" envName="NEW-DEV" prodId="BNR_HRPAY"
+                            target-url="/admin/adminEnv/installedReleases?envName=NEW-DEV&productId=BNR_HRPAY&applicationName=dev-db"
+                        >
+                            9.3.35.0.2
+
+                        </td>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BNR_HRPAY"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BNR_HRPAY&applicationName=dev-db"
+                        >
+                            9.3.36.1.1
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BNR_HRPAY"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BNR_HRPAY&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner HR and Payroll Tax Tables Update</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td/>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BNR_HRTAX"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BNR_HRTAX&applicationName=dev-db"
+                        >
+                            337
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BNR_HRTAX"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BNR_HRTAX&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Integration API</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td class="td-action admin-env-products-table-installed" envName="NEW-DEV" prodId="BXE_INTAPI"
+                            target-url="/admin/adminEnv/installedReleases?envName=NEW-DEV&productId=BXE_INTAPI&applicationName=dev-db"
+                        >
+                            9.37.1
+
+                        </td>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_INTAPI"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_INTAPI&applicationName=dev-db"
+                        >
+                            9.39.1
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_INTAPI"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_INTAPI&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Mass Data Update Utility (MDUU)</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td class="td-action admin-env-products-table-installed" envName="NEW-DEV" prodId="BNR_MDUU"
+                            target-url="/admin/adminEnv/installedReleases?envName=NEW-DEV&productId=BNR_MDUU&applicationName=dev-db"
+                        >
+                            8.2.0.4
+
+                        </td>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BNR_MDUU"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BNR_MDUU&applicationName=dev-db"
+                        >
+                            8.3
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BNR_MDUU"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BNR_MDUU&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Payment Connection Interface (PCI)</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td class="td-action admin-env-products-table-installed" envName="NEW-DEV" prodId="BXE_PCI"
+                            target-url="/admin/adminEnv/installedReleases?envName=NEW-DEV&productId=BXE_PCI&applicationName=dev-db"
+                        >
+                            9.1.0
+
+                        </td>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_PCI"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_PCI&applicationName=dev-db"
+                        >
+                            9.1.1
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_PCI"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_PCI&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Position Control</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td class="td-action admin-env-products-table-installed" envName="NEW-DEV" prodId="BNR_POSCTL"
+                            target-url="/admin/adminEnv/installedReleases?envName=NEW-DEV&productId=BNR_POSCTL&applicationName=dev-db"
+                        >
+                            9.3.28.0.3
+
+                        </td>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BNR_POSCTL"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BNR_POSCTL&applicationName=dev-db"
+                        >
+                            9.3.29.0.3
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BNR_POSCTL"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BNR_POSCTL&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Position Description (obsolete)</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td/>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_POSDESC"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_POSDESC&applicationName=dev-db"
+                        >
+                            9.1
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_POSDESC"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_POSDESC&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner SC California CALBFA Financial Aid</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td class="td-action admin-env-products-table-installed" envName="NEW-DEV" prodId="BNR_CAL_CALBFA"
+                            target-url="/admin/adminEnv/installedReleases?envName=NEW-DEV&productId=BNR_CAL_CALBFA&applicationName=dev-db"
+                        >
+                            9.3.52.1.2
+
+                        </td>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BNR_CAL_CALBFA"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BNR_CAL_CALBFA&applicationName=dev-db"
+                        >
+                            9.3.55.0.1
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BNR_CAL_CALBFA"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BNR_CAL_CALBFA&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner SC California CALBGEN General</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td class="td-action admin-env-products-table-installed" envName="NEW-DEV" prodId="BNR_CAL_CALBGEN"
+                            target-url="/admin/adminEnv/installedReleases?envName=NEW-DEV&productId=BNR_CAL_CALBGEN&applicationName=dev-db"
+                        >
+                            9.3.7.1.1
+
+                        </td>
+
+
+                        <td/>
+                        <td/>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner SC California CALBHR Human Resources</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td class="td-action admin-env-products-table-installed" envName="NEW-DEV" prodId="BNR_CAL_CALBHR"
+                            target-url="/admin/adminEnv/installedReleases?envName=NEW-DEV&productId=BNR_CAL_CALBHR&applicationName=dev-db"
+                        >
+                            9.3.33.0.2
+
+                        </td>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BNR_CAL_CALBHR"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BNR_CAL_CALBHR&applicationName=dev-db"
+                        >
+                            9.3.36.1.1
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BNR_CAL_CALBHR"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BNR_CAL_CALBHR&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner SC California CALBSTU Student</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td class="td-action admin-env-products-table-installed" envName="NEW-DEV" prodId="BNR_CAL_CALBSTU"
+                            target-url="/admin/adminEnv/installedReleases?envName=NEW-DEV&productId=BNR_CAL_CALBSTU&applicationName=dev-db"
+                        >
+                            9.3.38.1.1
+
+                        </td>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BNR_CAL_CALBSTU"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BNR_CAL_CALBSTU&applicationName=dev-db"
+                        >
+                            9.3.39.2.1
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BNR_CAL_CALBSTU"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BNR_CAL_CALBSTU&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner SC California General</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td class="td-action admin-env-products-table-installed" envName="NEW-DEV" prodId="BNR_CAL_GEN"
+                            target-url="/admin/adminEnv/installedReleases?envName=NEW-DEV&productId=BNR_CAL_GEN&applicationName=dev-db"
+                        >
+                            8.12.1
+
+                        </td>
+
+
+                        <td/>
+                        <td/>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner SC California REPT Report Engine</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td class="td-action admin-env-products-table-installed" envName="NEW-DEV" prodId="BNR_CAL_REPT"
+                            target-url="/admin/adminEnv/installedReleases?envName=NEW-DEV&productId=BNR_CAL_REPT&applicationName=dev-db"
+                        >
+                            9.3.35.0.1
+
+                        </td>
+
+
+                        <td/>
+                        <td/>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner SC Europe Common</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td/>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BNR_EU_COMMON"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BNR_EU_COMMON&applicationName=dev-db"
+                        >
+                            9.3.33.0.1
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BNR_EU_COMMON"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BNR_EU_COMMON&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner SC Global Self Service Engine</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td class="td-action admin-env-products-table-installed" envName="NEW-DEV" prodId="BNR_INT_SSEN"
+                            target-url="/admin/adminEnv/installedReleases?envName=NEW-DEV&productId=BNR_INT_SSEN&applicationName=dev-db"
+                        >
+                            9.3.16.0.1
+
+                        </td>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BNR_INT_SSEN"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BNR_INT_SSEN&applicationName=dev-db"
+                        >
+                            8.3
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BNR_INT_SSEN"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BNR_INT_SSEN&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Student</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td class="td-action admin-env-products-table-installed" envName="NEW-DEV" prodId="BNR_STU"
+                            target-url="/admin/adminEnv/installedReleases?envName=NEW-DEV&productId=BNR_STU&applicationName=dev-db"
+                        >
+                            9.3.38.1.2
+
+                        </td>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BNR_STU"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BNR_STU&applicationName=dev-db"
+                        >
+                            9.3.39.2.3
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BNR_STU"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BNR_STU&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Student Academic History (obsolete)</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td/>
+
+
+                        <td/>
+                        <td/>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Student Advising (obsolete)</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td/>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_STADV"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_STADV&applicationName=dev-db"
+                        >
+                            9.3.0.2
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_STADV"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_STADV&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Student API</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td class="td-action admin-env-products-table-installed" envName="NEW-DEV" prodId="BXE_STUAPI"
+                            target-url="/admin/adminEnv/installedReleases?envName=NEW-DEV&productId=BXE_STUAPI&applicationName=dev-db"
+                        >
+                            9.37.1.1
+
+                        </td>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_STUAPI"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_STUAPI&applicationName=dev-db"
+                        >
+                            9.39.2
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_STUAPI"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_STUAPI&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Student Attendance Tracking (obsolete)</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td/>
+
+
+                        <td/>
+                        <td/>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Student Attendance Tracking Self Service (obsolete)</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td/>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_STATSS"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_STATSS&applicationName=dev-db"
+                        >
+                            9.2.0.2
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_STATSS"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_STATSS&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Student Class Schedule (obsolete)</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td/>
+
+
+                        <td/>
+                        <td/>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Student Course Catalog (obsolete)</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td/>
+
+
+                        <td/>
+                        <td/>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Student eTranscript</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td/>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_ETRANS"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_ETRANS&applicationName=dev-db"
+                        >
+                            9.12.1
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_ETRANS"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_ETRANS&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Student Overall (obsolete)</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td/>
+
+
+                        <td/>
+                        <td/>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Student Registration (obsolete)</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td/>
+
+
+                        <td/>
+                        <td/>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Student Registration Self Service</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td class="td-action admin-env-products-table-installed" envName="NEW-DEV" prodId="BXE_STUREGSSB"
+                            target-url="/admin/adminEnv/installedReleases?envName=NEW-DEV&productId=BXE_STUREGSSB&applicationName=dev-db"
+                        >
+                            9.35.1
+
+                        </td>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_STUREGSSB"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_STUREGSSB&applicationName=dev-db"
+                        >
+                            9.37.1.1
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_STUREGSSB"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_STUREGSSB&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Student Self Service</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td/>
+
+
+                        <td/>
+                        <td/>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Student Self Service</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td class="td-action admin-env-products-table-installed" envName="NEW-DEV" prodId="BXE_STUSS2"
+                            target-url="/admin/adminEnv/installedReleases?envName=NEW-DEV&productId=BXE_STUSS2&applicationName=dev-db"
+                        >
+                            9.30.1
+
+                        </td>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_STUSS2"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_STUSS2&applicationName=dev-db"
+                        >
+                            9.32.1
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_STUSS2"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_STUSS2&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Student Self-Service</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td class="td-action admin-env-products-table-installed" envName="NEW-DEV" prodId="BNR_STUSS"
+                            target-url="/admin/adminEnv/installedReleases?envName=NEW-DEV&productId=BNR_STUSS&applicationName=dev-db"
+                        >
+                            8.7.2.12
+
+                        </td>
+
+
+                        <td/>
+                        <td/>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Web General</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td class="td-action admin-env-products-table-installed" envName="NEW-DEV" prodId="BNR_WEBGEN"
+                            target-url="/admin/adminEnv/installedReleases?envName=NEW-DEV&productId=BNR_WEBGEN&applicationName=dev-db"
+                        >
+                            8.9
+
+                        </td>
+
+
+                        <td/>
+                        <td/>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Banner Web Tailor</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td class="td-action admin-env-products-table-installed" envName="NEW-DEV" prodId="BNR_WEBTLR"
+                            target-url="/admin/adminEnv/installedReleases?envName=NEW-DEV&productId=BNR_WEBTLR&applicationName=dev-db"
+                        >
+                            8.11
+
+                        </td>
+
+
+                        <td/>
+                        <td/>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Blueprint Utilities</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td/>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BNR_BLUPRNT"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BNR_BLUPRNT&applicationName=dev-db"
+                        >
+                            1.6
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BNR_BLUPRNT"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BNR_BLUPRNT&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Ellucian Ethos API Management Center</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td class="td-action admin-env-products-table-installed" envName="NEW-DEV" prodId="BXE_EAMC"
+                            target-url="/admin/adminEnv/installedReleases?envName=NEW-DEV&productId=BXE_EAMC&applicationName=dev-db"
+                        >
+                            1.1.0.2
+
+                        </td>
+
+
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_EAMC"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_EAMC&applicationName=dev-db"
+                        >
+                            2.0.0.2
+
+                        </td>
+                        <td class="td-action admin-env-products-table-available" envName="NEW-DEV" prodId="BXE_EAMC"
+                            target-url="/admin/adminEnv/availableReleases?envName=NEW-DEV&productId=BXE_EAMC&applicationName=dev-db"
+                        >
+
+                        </td>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Integration Services</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td class="td-action admin-env-products-table-installed" envName="NEW-DEV" prodId="BNR_INT"
+                            target-url="/admin/adminEnv/installedReleases?envName=NEW-DEV&productId=BNR_INT&applicationName=dev-db"
+                        >
+                            8.0.2.1
+
+                        </td>
+
+
+                        <td/>
+                        <td/>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+                <tr>
+                    <td>Luminis Channels for Banner</td>
+                    <td style="display:none;">BannerERP</td>
+                    <td style="display:none;">dev-db</td>
+
+                        <td class="td-action admin-env-products-table-installed" envName="NEW-DEV" prodId="BNR_LCB"
+                            target-url="/admin/adminEnv/installedReleases?envName=NEW-DEV&productId=BNR_LCB&applicationName=dev-db"
+                        >
+                            8.4.0.3
+
+                        </td>
+
+
+                        <td/>
+                        <td/>
+
+                </tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            </tbody>
+        </table>
+        </div>
+        <span class="shim"></span>
+        <div class="btn-container right">
+            <button class="inline-btn form-btn admin-env-products-refresh-btn" target-url="/admin/adminEnv/refreshInstalledReleases?envName=NEW-DEV">Refresh Releases</button>
+            <button class="inline-btn form-btn admin-main-nav-node" target-url="/admin/adminEnv/clearAllTargets?envName=NEW-DEV">Clear Selection(s)</button>
+
+
+                  <button class="inline-btn form-btn admin-env-products-refresh-btn" target-url="/admin/adminEnv/installReleasesPrompt?envName=NEW-DEV">
+
+
+                          Manage Upgrade Job
+
+                  </button>
+
+        </div>
+        <span class="shim"></span>
+    </div>
+</div>

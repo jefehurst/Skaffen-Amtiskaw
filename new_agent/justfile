@@ -1,0 +1,606 @@
+# Development helper tasks
+
+default:
+    @just --list
+
+# Show help for a recipe (human-readable)
+help RECIPE:
+    @cat {{justfile_directory()}}/help/{{RECIPE}}.md
+
+# Show help for a recipe (token-compressed for AI agents)
+agenthelp RECIPE:
+    @cat {{justfile_directory()}}/help/{{RECIPE}}-compressed.md
+
+# Display setup instructions
+setup:
+    @echo "1. Ensure Nix with flakes support is installed."
+    @echo "2. Run 'direnv allow' to enable the development environment."
+    @echo "3. Or run 'nix develop' to enter the shell manually."
+
+# Launch dev shell manually
+shell:
+    @echo "Launching devenv shell"
+    @nix develop
+
+# Run a command inside nix develop (for when not in active devshell)
+do +CMD:
+    nix develop --command bash -c "{{CMD}}"
+
+# Run tests
+test:
+    poetry run pytest
+
+# Run linters
+lint:
+    poetry run ruff check .
+    poetry run ruff format --check .
+
+# Format code
+format:
+    poetry run ruff format .
+    poetry run ruff check --fix .
+
+# Install Python dependencies
+install:
+    poetry install
+
+# Update flake inputs
+update:
+    nix flake update
+
+# Show a nicely formatted git diff
+diff:
+    @git diff --color=always | delta --paging=always
+
+# Configure Logseq MCP token for Claude Code integration
+logseq-token TOKEN:
+    @echo "Setting Logseq API token..."
+    @mkdir -p ~/.cache/logseq-mcp-tools
+    @if [ -f ~/.cache/logseq-mcp-tools/.env ]; then \
+        sed -i 's/^LOGSEQ_TOKEN=.*/LOGSEQ_TOKEN={{TOKEN}}/' ~/.cache/logseq-mcp-tools/.env; \
+    else \
+        echo "LOGSEQ_TOKEN={{TOKEN}}" > ~/.cache/logseq-mcp-tools/.env; \
+    fi
+    @echo "Token configured. Restart Claude Code for changes to take effect."
+    @echo ""
+    @echo "Note: Ensure Logseq has HTTP API enabled with this token:"
+    @echo "  Settings → Features → Enable HTTP API"
+    @echo "  Settings → Features → HTTP API Authentication Token"
+
+# --- Logseq CLI commands (lsq) ---
+
+# Run a Datalog query against Logseq
+lsq-query QUERY:
+    poetry run lsq query "{{QUERY}}"
+
+# Get blocks modified in the last N minutes (default: 5)
+lsq-recent MINUTES="5":
+    poetry run lsq recent --minutes {{MINUTES}}
+
+# Get all blocks on a page
+lsq-blocks PAGE:
+    poetry run lsq blocks "{{PAGE}}"
+
+# Update a block's content
+lsq-update UUID CONTENT:
+    poetry run lsq update "{{UUID}}" "{{CONTENT}}"
+
+# Remove a block (with confirmation)
+lsq-remove UUID:
+    poetry run lsq remove "{{UUID}}"
+
+# Watch for changes in Logseq (polls every N seconds, default: 10)
+lsq-watch INTERVAL="10":
+    poetry run lsq watch --interval {{INTERVAL}}
+
+# Block until a change occurs in Logseq, output JSON with changes
+# Use --since to pass timestamp from previous call to avoid missing events
+lsq-await SINCE="" TIMEOUT="300":
+    #!/usr/bin/env bash
+    if [ -n "{{SINCE}}" ]; then
+        poetry run lsq await-change --since {{SINCE}} --timeout {{TIMEOUT}}
+    else
+        poetry run lsq await-change --timeout {{TIMEOUT}}
+    fi
+
+# Reply to a block (insert as child or sibling)
+lsq-reply UUID CONTENT SIBLING="":
+    #!/usr/bin/env bash
+    if [ -n "{{SIBLING}}" ]; then
+        poetry run lsq reply "{{UUID}}" "{{CONTENT}}" --sibling
+    else
+        poetry run lsq reply "{{UUID}}" "{{CONTENT}}"
+    fi
+
+# --- Vendor support CLIs ---
+
+# Load local.env and run a command in ellucian-support directory
+[private]
+_ellucian-run +CMD:
+    #!/usr/bin/env bash
+    set -a && source {{justfile_directory()}}/local.env && set +a
+    cd {{justfile_directory()}}/ellucian-support && {{CMD}}
+
+# Search Ellucian support (requires prior login)
+ellucian-find QUERY *ARGS:
+    just _ellucian-run "poetry run ellucian-support find '{{QUERY}}' {{ARGS}}"
+
+# Fetch an Ellucian article by URL or sys_id
+ellucian-fetch ARTICLE:
+    just _ellucian-run poetry run ellucian-support fetch "{{ARTICLE}}"
+
+# Login to Ellucian support (will prompt for MFA)
+ellucian-login:
+    just _ellucian-run poetry run ellucian-support login
+
+# Login to Ellucian support with MFA code
+ellucian-login-mfa MFA:
+    just _ellucian-run "echo '{{MFA}}' | poetry run ellucian-support login -f"
+
+# Check Ellucian support session status
+ellucian-status:
+    just _ellucian-run poetry run ellucian-support status
+
+# Get an Ellucian support ticket by case number
+ellucian-ticket NUMBER *ARGS:
+    just _ellucian-run "poetry run ellucian-support ticket '{{NUMBER}}' {{ARGS}}"
+
+# List recent Ellucian support tickets
+ellucian-tickets *ARGS:
+    just _ellucian-run "poetry run ellucian-support tickets {{ARGS}}"
+
+# Add a comment to an Ellucian support ticket
+ellucian-comment NUMBER MESSAGE:
+    just _ellucian-run "poetry run ellucian-support comment '{{NUMBER}}' '{{MESSAGE}}'"
+
+# Send a keepalive request to Ellucian support (validates session)
+ellucian-keepalive:
+    @just _ellucian-run poetry run ellucian-support status >/dev/null 2>&1 && echo "Session alive" || { echo "Session expired"; exit 1; }
+
+# Poll Ellucian session every 90s until it expires (run in background)
+ellucian-keepalive-loop INTERVAL="90":
+    #!/usr/bin/env bash
+    echo "Starting Ellucian keepalive loop (polling every {{INTERVAL}}s)"
+    echo "Press Ctrl+C to stop"
+    while true; do
+        if just ellucian-keepalive; then
+            sleep {{INTERVAL}}
+        else
+            echo "Ellucian session expired at $(date)"
+            exit 1
+        fi
+    done
+
+# Load local.env and run a command in runner-support directory
+[private]
+_runner-run +CMD:
+    #!/usr/bin/env bash
+    set -a && source {{justfile_directory()}}/local.env && set +a
+    cd {{justfile_directory()}}/runner-support && {{CMD}}
+
+# Search Runner support
+runner-find QUERY:
+    just _runner-run poetry run runner-support search "{{QUERY}}"
+
+# Login to Runner support
+runner-login:
+    just _runner-run poetry run runner-support login
+
+# Check Runner support login status
+runner-status:
+    just _runner-run poetry run runner-support status
+
+# --- Pastebin utilities ---
+
+# Paste a file to paste.rs
+# Returns URL and curl command for retrieval
+paste FILE:
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    FILE="{{FILE}}"
+
+    if [[ ! -f "$FILE" ]]; then
+        echo "Error: File not found: $FILE" >&2
+        exit 1
+    fi
+
+    RESULT=$(curl -sf --data-binary @"$FILE" https://paste.rs/) || {
+        echo "Error: paste.rs upload failed" >&2
+        exit 1
+    }
+
+    echo "$RESULT"
+    echo "curl -sk $RESULT"
+
+# Paste from stdin to paste.rs
+paste-stdin:
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    RESULT=$(curl -sf --data-binary @- https://paste.rs/) || {
+        echo "Error: paste.rs upload failed" >&2
+        exit 1
+    }
+
+    echo "$RESULT"
+
+# Export a single page to a file
+lsq-export-page PAGE OUTPUT:
+    poetry run lsq export-page "{{PAGE}}" -o "{{OUTPUT}}"
+
+# Export all journal pages to tmp/journals/
+lsq-export-journals OUTPUT="tmp/journals":
+    poetry run lsq export-journals -o "{{OUTPUT}}"
+
+# Find blocks matching criteria on a page
+lsq-find PAGE *ARGS:
+    poetry run lsq find-blocks "{{PAGE}}" {{ARGS}}
+
+# Find the UUID of a section heading
+lsq-section-uuid PAGE HEADING:
+    poetry run lsq section-uuid "{{PAGE}}" "{{HEADING}}"
+
+# Bulk update blocks (use --dry-run first!)
+lsq-bulk-update PAGE *ARGS:
+    poetry run lsq bulk-update "{{PAGE}}" {{ARGS}}
+
+# --- tmux utilities ---
+# These recipes help Claude Code interact with tmux sessions
+
+# Check if running inside tmux (exit 0 if yes, 1 if no)
+tmux-check:
+    #!/usr/bin/env bash
+    if [ -n "$TMUX" ]; then
+        echo "Inside tmux"
+        tmux display-message -p "Session: #S | Window: #W (#I) | Pane: #P"
+        exit 0
+    else
+        echo "Not inside tmux"
+        exit 1
+    fi
+
+# Show current tmux context (session, window, pane details)
+tmux-context:
+    #!/usr/bin/env bash
+    if [ -z "$TMUX" ]; then
+        echo "Not inside tmux" >&2
+        exit 1
+    fi
+    echo "Session:  $(tmux display-message -p '#S')"
+    echo "Window:   $(tmux display-message -p '#W') (index #I)"
+    echo "Pane:     $(tmux display-message -p '#P') (id #D)"
+    echo "Size:     $(tmux display-message -p '#{pane_width}x#{pane_height}')"
+    echo "CWD:      $(tmux display-message -p '#{pane_current_path}')"
+
+# List all panes across all sessions
+tmux-list-panes:
+    tmux list-panes -a -F "#{session_name}:#{window_index}.#{pane_index}  #{pane_id}  #{pane_width}x#{pane_height}  #{pane_current_command}  #{pane_current_path}"
+
+# List all windows in current session
+tmux-list-windows:
+    tmux list-windows -F "#I: #W #{?window_active,(active),} #{window_panes} pane(s)"
+
+# Set window/tab title
+tmux-title TITLE:
+    tmux rename-window "{{TITLE}}"
+
+# Flash visual bell / alert in current pane
+tmux-alert MESSAGE="":
+    #!/usr/bin/env bash
+    if [ -n "{{MESSAGE}}" ]; then
+        tmux display-message "{{MESSAGE}}"
+    fi
+    # Send bell character to trigger visual bell
+    printf '\a'
+
+# Send keys/command to another pane (does NOT press Enter)
+tmux-type TARGET TEXT:
+    tmux send-keys -t "{{TARGET}}" -l "{{TEXT}}"
+
+# Send command to another pane and execute it
+tmux-send TARGET CMD:
+    tmux send-keys -t "{{TARGET}}" "{{CMD}}" Enter
+
+# Capture content from another pane (visible area only)
+tmux-capture TARGET:
+    tmux capture-pane -t "{{TARGET}}" -p
+
+# Capture content from another pane with scrollback
+tmux-capture-full TARGET LINES="1000":
+    tmux capture-pane -t "{{TARGET}}" -p -S -{{LINES}}
+
+# Clear a target pane
+tmux-clear TARGET:
+    tmux send-keys -t "{{TARGET}}" C-c C-l
+
+# Spawn a new window with a command
+tmux-spawn-window NAME CMD:
+    tmux new-window -n "{{NAME}}" "{{CMD}}"
+
+# Spawn a new pane (horizontal split) with a command
+tmux-spawn-pane-h CMD:
+    tmux split-window -h "{{CMD}}"
+
+# Spawn a new pane (vertical split) with a command
+tmux-spawn-pane-v CMD:
+    tmux split-window -v "{{CMD}}"
+
+# Spawn a background pane (split, run command, don't switch focus)
+tmux-spawn-bg CMD:
+    tmux split-window -v -d "{{CMD}}"
+
+# Run command in new window and wait for completion, then close
+# Useful for: just tmux-run-wait "npm run build"
+tmux-run-wait CMD:
+    #!/usr/bin/env bash
+    CHANNEL="done-$$"
+    tmux new-window -n "running" "{{CMD}}; tmux wait-for -S $CHANNEL"
+    tmux wait-for "$CHANNEL"
+    echo "Command completed"
+
+# Check if a pane is still running its command or at shell prompt
+tmux-pane-status TARGET:
+    #!/usr/bin/env bash
+    CMD=$(tmux display-message -t "{{TARGET}}" -p '#{pane_current_command}')
+    echo "Current command: $CMD"
+    if [ "$CMD" = "bash" ] || [ "$CMD" = "zsh" ] || [ "$CMD" = "fish" ]; then
+        echo "Status: At shell prompt (idle)"
+    else
+        echo "Status: Running command"
+    fi
+
+# Get last N lines from a pane
+tmux-tail TARGET LINES="20":
+    tmux capture-pane -t "{{TARGET}}" -p | tail -n {{LINES}}
+
+# Watch a pane's output (poll every 2 seconds)
+tmux-watch TARGET INTERVAL="2":
+    #!/usr/bin/env bash
+    while true; do
+        clear
+        echo "=== Watching {{TARGET}} (Ctrl+C to stop) ==="
+        tmux capture-pane -t "{{TARGET}}" -p | tail -30
+        sleep {{INTERVAL}}
+    done
+
+# Kill a pane
+tmux-kill-pane TARGET:
+    tmux kill-pane -t "{{TARGET}}"
+
+# Kill a window
+tmux-kill-window TARGET:
+    tmux kill-window -t "{{TARGET}}"
+
+# Send Ctrl+C to a pane (interrupt running command)
+tmux-interrupt TARGET:
+    tmux send-keys -t "{{TARGET}}" C-c
+
+# Wait for a pane to return to shell (polls until idle)
+tmux-wait-idle TARGET TIMEOUT="60":
+    #!/usr/bin/env bash
+    ELAPSED=0
+    while [ $ELAPSED -lt {{TIMEOUT}} ]; do
+        CMD=$(tmux display-message -t "{{TARGET}}" -p '#{pane_current_command}')
+        if [ "$CMD" = "bash" ] || [ "$CMD" = "zsh" ] || [ "$CMD" = "fish" ] || [ "$CMD" = "sh" ]; then
+            echo "Pane {{TARGET}} is now idle"
+            exit 0
+        fi
+        sleep 1
+        ELAPSED=$((ELAPSED + 1))
+    done
+    echo "Timeout waiting for pane {{TARGET}} to become idle" >&2
+    exit 1
+
+# Grep output from a pane
+tmux-grep TARGET PATTERN:
+    tmux capture-pane -t "{{TARGET}}" -p -S -1000 | grep -E "{{PATTERN}}" || true
+
+# Run command in pane, capture output (synchronous)
+# This sends a command, waits for it to complete, and captures output
+tmux-exec TARGET CMD:
+    #!/usr/bin/env bash
+    MARKER="__TMUX_EXEC_DONE_$$__"
+    # Cancel any partial input, then send command with marker
+    tmux send-keys -t "{{TARGET}}" C-c
+    sleep 0.2
+    tmux send-keys -t "{{TARGET}}" "{{CMD}}; echo $MARKER" Enter
+    # Wait for marker to appear
+    for i in $(seq 1 60); do
+        OUTPUT=$(tmux capture-pane -t "{{TARGET}}" -p)
+        if echo "$OUTPUT" | grep -q "$MARKER"; then
+            # Extract just the command output (between command echo and marker)
+            echo "$OUTPUT" | sed -n "/$MARKER/!p" | tail -n +2 | grep -v "^$" | head -n -1
+            exit 0
+        fi
+        sleep 0.5
+    done
+    echo "Timeout waiting for command" >&2
+    exit 1
+
+# Spawn a new Claude Code session in a new tmux window
+tmux-claude NAME="claude":
+    tmux new-window -n "{{NAME}}" "cd {{justfile_directory()}} && ./start.sh"
+
+# Show summary of all running Claude Code sessions for this project
+tmux-sessions:
+    #!/usr/bin/env python3
+    import subprocess
+    import json
+    import os
+    from pathlib import Path
+
+    PROJECT_DIR = "{{justfile_directory()}}"
+    PROJECT_NAME = os.path.basename(PROJECT_DIR)
+
+    # Get all tmux panes running claude in this project directory
+    result = subprocess.run(
+        ["tmux", "list-panes", "-a", "-F",
+         "#{session_name}:#{window_index}.#{pane_index}\t#{pane_id}\t#{pane_current_command}\t#{pane_current_path}\t#{window_name}"],
+        capture_output=True, text=True
+    )
+
+    claude_panes = []
+    for line in result.stdout.strip().split('\n'):
+        if not line:
+            continue
+        parts = line.split('\t')
+        if len(parts) >= 5 and 'claude' in parts[2].lower():
+            # Only include sessions in this project
+            if parts[3] == PROJECT_DIR or parts[3].startswith(PROJECT_DIR + '/'):
+                claude_panes.append({
+                    'target': parts[0],
+                    'pane_id': parts[1],
+                    'command': parts[2],
+                    'cwd': parts[3],
+                    'window': parts[4]
+                })
+
+    if not claude_panes:
+        print(f"No {PROJECT_NAME} Claude Code sessions found running in tmux.")
+        exit(0)
+
+    claude_dir = Path.home() / '.claude' / 'projects'
+    project_session_dir = claude_dir / PROJECT_DIR.replace('/', '-')
+
+    print(f"{PROJECT_NAME} sessions:")
+    print(f"{'Window':<15} {'Pane':<12} {'Summary'}")
+    print("=" * 72)
+
+    for pane in claude_panes:
+        summary = "(active - no summary yet)"
+
+        if project_session_dir.exists():
+            # Get most recent session file
+            session_files = sorted(
+                project_session_dir.glob('*.jsonl'),
+                key=lambda f: f.stat().st_mtime,
+                reverse=True
+            )
+
+            if session_files:
+                # Use grep to find last summary efficiently
+                try:
+                    result = subprocess.run(
+                        ["grep", "-a", '"type":"summary"', str(session_files[0])],
+                        capture_output=True, text=True
+                    )
+                    if result.stdout:
+                        # Get last summary line
+                        last_line = result.stdout.strip().split('\n')[-1]
+                        msg = json.loads(last_line)
+                        summary = msg.get('summary', summary)
+                except Exception:
+                    pass
+
+        window_name = pane['window']
+        pane_target = pane['target']
+
+        # Truncate summary if too long
+        if len(summary) > 43:
+            summary = summary[:40] + "..."
+
+        print(f"{window_name:<15} {pane_target:<12} {summary}")
+
+# Highlight/flash a pane border momentarily
+tmux-flash TARGET:
+    #!/usr/bin/env bash
+    tmux select-pane -t "{{TARGET}}" -P 'bg=yellow'
+    sleep 0.3
+    tmux select-pane -t "{{TARGET}}" -P 'bg=default'
+
+# Monitor a worker pane for completion signal or prompts
+# Returns: "complete", "waiting", or "working"
+# SIGNAL: Pattern to match for completion (default: TASK_COMPLETE)
+tmux-monitor TARGET SIGNAL="TASK_COMPLETE":
+    #!/usr/bin/env bash
+    OUTPUT=$(tmux capture-pane -t "{{TARGET}}" -p -S -500)
+
+    # Check for completion signal (but not in the original instruction)
+    # Look for signal at start of line (actual echo output)
+    if echo "$OUTPUT" | grep -qE "^{{SIGNAL}}"; then
+        echo "complete"
+        exit 0
+    fi
+
+    # Check for permission prompts
+    if echo "$OUTPUT" | grep -qE "Do you want to proceed|Yes.*don't ask|Esc to exit"; then
+        echo "waiting"
+        # Show the prompt
+        echo "---"
+        echo "$OUTPUT" | grep -A5 "Do you want" | head -10
+        exit 0
+    fi
+
+    # Still working
+    echo "working"
+
+# Wait for worker completion with periodic status checks
+# Polls every INTERVAL seconds up to TIMEOUT total
+tmux-await TARGET SIGNAL="TASK_COMPLETE" INTERVAL="30" TIMEOUT="600":
+    #!/usr/bin/env bash
+    ELAPSED=0
+    while [ $ELAPSED -lt {{TIMEOUT}} ]; do
+        STATUS=$(just tmux-monitor "{{TARGET}}" "{{SIGNAL}}" 2>/dev/null | head -1)
+
+        case "$STATUS" in
+            complete)
+                echo "Worker {{TARGET}} completed!"
+                just tmux-flash "{{TARGET}}"
+                exit 0
+                ;;
+            waiting)
+                echo "Worker {{TARGET}} waiting for input!"
+                just tmux-flash "{{TARGET}}"
+                exit 2
+                ;;
+            *)
+                # Still working, show brief status
+                TODOS=$(just tmux-capture "{{TARGET}}" 2>/dev/null | grep -E "^  ⎿  ☐|^  ⎿  ☒" | tail -3)
+                if [ -n "$TODOS" ]; then
+                    echo "[${ELAPSED}s] Working... $TODOS" | head -1
+                else
+                    echo "[${ELAPSED}s] Working..."
+                fi
+                ;;
+        esac
+
+        sleep {{INTERVAL}}
+        ELAPSED=$((ELAPSED + {{INTERVAL}}))
+    done
+
+    echo "Timeout after {{TIMEOUT}}s waiting for {{TARGET}}" >&2
+    exit 1
+
+# --- Session Analysis (Self-Improvement) ---
+
+# List new/updated sessions since last review (TSV: STATUS ID MTIME SIZE)
+sessions-pending:
+    @{{justfile_directory()}}/scripts/session-diff.sh
+
+# Show session review summary (counts only)
+sessions-summary:
+    @{{justfile_directory()}}/scripts/session-diff.sh --summary
+
+# Mark a session as reviewed (ID, optional FINDINGS count)
+sessions-mark ID FINDINGS="0":
+    @{{justfile_directory()}}/scripts/session-diff.sh --mark "{{ID}}" "{{FINDINGS}}"
+
+# Analyze session logs for correction patterns
+analyze-sessions:
+    python3 {{justfile_directory()}}/scripts/analyze_sessions.py
+
+# Analyze sessions and save to file
+analyze-sessions-save:
+    python3 {{justfile_directory()}}/scripts/analyze_sessions.py --output {{justfile_directory()}}/reflect/analysis-$(date +%Y%m%d).md
+    echo "Report saved to reflect/analysis-$(date +%Y%m%d).md"
+
+# Analyze sessions as JSON
+analyze-sessions-json:
+    python3 {{justfile_directory()}}/scripts/analyze_sessions.py --json
+
+# --- Cloud Workstation ---
+
+# Run cloud workstation commands (just cloud <command>)
+cloud *ARGS:
+    "{{justfile_directory()}}/cloud/cloud.sh" {{ARGS}}

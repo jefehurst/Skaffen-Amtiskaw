@@ -1,0 +1,9 @@
+# HAR files may contain sensitive data (cookies, passwords, session tokens)
+*.har
+
+# HTML fixtures extracted from HAR - may contain sensitive data
+fixtures/html/
+
+# Keep the directory structure but ignore contents
+!fixtures/har/.gitkeep
+!fixtures/html/.gitkeep

@@ -1,0 +1,109 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      # Generic
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-added-large-files
+      - id: check-case-conflict
+      - id: check-executables-have-shebangs
+      - id: check-shebang-scripts-are-executable
+      - id: check-merge-conflict
+      - id: destroyed-symlinks
+      - id: detect-private-key
+        exclude: ^docs/argocd/applications\.md$  # Contains example placeholder
+
+      # Languages
+      - id: check-yaml
+      - id: check-toml
+      - id: check-xml
+      - id: check-json
+
+      - id: pretty-format-json
+        args: ["--autofix", "--indent", "2"]
+
+  # Security - secret detection
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.21.2
+    hooks:
+      - id: gitleaks
+
+  - repo: https://github.com/Lucas-C/pre-commit-hooks
+    rev: v1.5.5
+    hooks:
+      - id: remove-crlf
+      - id: remove-tabs
+
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.35.1
+    hooks:
+      - id: yamllint
+        args: ["-c=.yamllint.yml"]
+
+  # Markdown formatting - aligns tables for plaintext readability
+  - repo: https://github.com/hukkin/mdformat
+    rev: 0.7.21
+    hooks:
+      - id: mdformat
+        args: ["--wrap", "120", "--number"]  # Wrap paragraphs at 120 cols; preserve ordered list numbering
+        additional_dependencies:
+          - mdformat-gfm          # GitHub-flavored markdown (tables, strikethrough, etc.)
+          - mdformat-frontmatter  # Preserve YAML frontmatter
+          - mdformat-footnote     # Footnote support
+
+  # Python linting and formatting
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.14.8
+    hooks:
+      - id: ruff-check
+        args: ["--fix"]
+      - id: ruff-format
+
+  # Python type checking
+  - repo: https://github.com/RobertCraigie/pyright-python
+    rev: v1.1.391
+    hooks:
+      - id: pyright
+
+  # Nix linting and formatting
+  # These use tools from the Nix devshell (add to flake.nix devShell.packages)
+  - repo: local
+    hooks:
+      - id: statix
+        name: statix (nix linter)
+        entry: statix check
+        language: system
+        files: \.nix$
+        pass_filenames: false
+
+      - id: deadnix
+        name: deadnix (find dead nix code)
+        entry: deadnix --fail
+        language: system
+        files: \.nix$
+
+      - id: nixfmt
+        name: nixfmt (nix formatter)
+        entry: nixfmt
+        language: system
+        files: \.nix$
+
+  # Shell linting and formatting
+  # These use tools from the Nix devshell (add to flake.nix devShell.packages)
+  - repo: local
+    hooks:
+      - id: shellcheck
+        name: shellcheck (shell linter)
+        entry: shellcheck
+        language: system
+        types: [shell]
+        exclude: ^\.envrc$  # direnv
+
+      - id: shfmt
+        name: shfmt (shell formatter)
+        entry: shfmt -w -i 2 -ci -bn
+        language: system
+        types: [shell]

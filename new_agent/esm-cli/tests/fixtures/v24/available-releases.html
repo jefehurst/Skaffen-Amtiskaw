@@ -1,0 +1,347 @@
+
+
+<div id="main" class="admin-main-template-div">
+    <script type="text/javascript">
+
+        window.targetReleaseDelim = "___";
+
+</script>
+
+    <!--%@ taglib uri="http://www.owasp.org/index.php/Category:OWASP_CSRFGuard_Project/Owasp.CsrfGuard.tld" prefix="csrf" %>
+
+    <form name="csrf_form" action="protect.html">
+        <input type="hidden" name="<csrf:tokenname/>" value="<csrf:tokenvalue uri="protect.html"/>"/>
+    </form-->
+
+    <div id="admin-env-product" >
+        <div class="main-content-header">
+            Rio Hondo College -
+            Environment: NEW-DEV New-DEV Environment
+        </div>
+        <span class="shim"></span>
+        <div class="dialog-title">Product: Banner General (BNR_GEN)</div>
+
+
+
+        <div id="scroll-lock" class="admin-div-multi-table-scroll">
+        <div id="env-list" class="css-grid">
+            <script type="text/javascript">$(function(){app.quickFixedHeaderTable(".css-grid");})</script>
+        <table class="simple-table">
+            <thead><tr>
+                <th>Target Release</th>
+                <th>Rel Doc</th>
+                <th>Available Upgrade Release</th>
+                <th>Release Date</th>
+                <th>Upgrade Properties</th>
+            </tr></thead>
+            <tbody>
+
+                    <tr class="admin-env-product-table-row" >
+
+                        <td>
+
+                                <input type="checkbox" class="admin-env-target-radio-select" name="targetRadioSelection"
+                                    value="9.3.36.2.1"
+                                    target-url="/admin/adminEnv/selectTarget?envName=NEW-DEV&envDesc=New-DEV+Environment&productId=BNR_GEN&applicationName=dev-db"
+                                />
+
+                        </td>
+                        <td class="td-action">
+
+                            <button class="table-link doc-link admin-main-nav-node"
+                                target-url="/admin/adminEnv/releaseDocs?envName=NEW-DEV&relVersion=9.3.36.2.1&productId=BNR_GEN&applicationName=dev-db&availRelProductId=BNR_GEN"
+                            ></button>
+
+                        </td>
+                        <td>9.3.36.2.1 </td>
+                        <td>2025-11-20 00:00:01.0</td>
+
+                            <td class="td-action">
+
+                                    <button class="table-link doc-check-link admin-env-upgrade-props-node"
+                                            target-url="/admin/adminEnv/upgradeSpecificProperties?envName=NEW-DEV&relVersion=9.3.36.2.1&productId=BNR_GEN&origin=availableReleases&applicationName=dev-db"
+                                    ></button>
+
+                            </td>
+
+                    </tr>
+
+
+
+                    <tr class="admin-env-product-table-row" >
+
+                        <td>
+
+                                <input type="checkbox" class="admin-env-target-radio-select" name="targetRadioSelection"
+                                    value="9.3.36.1.2"
+                                    target-url="/admin/adminEnv/selectTarget?envName=NEW-DEV&envDesc=New-DEV+Environment&productId=BNR_GEN&applicationName=dev-db"
+                                />
+
+                        </td>
+                        <td class="td-action">
+
+                            <button class="table-link doc-link admin-main-nav-node"
+                                target-url="/admin/adminEnv/releaseDocs?envName=NEW-DEV&relVersion=9.3.36.1.2&productId=BNR_GEN&applicationName=dev-db&availRelProductId=BNR_GEN"
+                            ></button>
+
+                        </td>
+                        <td>9.3.36.1.2 </td>
+                        <td>2025-10-16 00:00:01.0</td>
+
+                            <td class="td-action">
+
+                                    <button class="table-link doc-link admin-env-upgrade-props-node"
+                                            target-url="/admin/adminEnv/upgradeSpecificProperties?envName=NEW-DEV&relVersion=9.3.36.1.2&productId=BNR_GEN&origin=availableReleases&applicationName=dev-db"
+                                    ></button>
+
+                            </td>
+
+                    </tr>
+
+
+
+                    <tr class="admin-env-product-table-row" >
+
+                        <td>
+
+                                <input type="checkbox" class="admin-env-target-radio-select" name="targetRadioSelection"
+                                    value="9.3.36.0.3"
+                                    target-url="/admin/adminEnv/selectTarget?envName=NEW-DEV&envDesc=New-DEV+Environment&productId=BNR_GEN&applicationName=dev-db"
+                                />
+
+                        </td>
+                        <td class="td-action">
+
+                            <button class="table-link doc-link admin-main-nav-node"
+                                target-url="/admin/adminEnv/releaseDocs?envName=NEW-DEV&relVersion=9.3.36.0.3&productId=BNR_GEN&applicationName=dev-db&availRelProductId=BNR_GEN"
+                            ></button>
+
+                        </td>
+                        <td>9.3.36.0.3 </td>
+                        <td>2025-09-18 00:00:01.0</td>
+
+                            <td class="td-action">
+
+                                    <button class="table-link doc-link admin-env-upgrade-props-node"
+                                            target-url="/admin/adminEnv/upgradeSpecificProperties?envName=NEW-DEV&relVersion=9.3.36.0.3&productId=BNR_GEN&origin=availableReleases&applicationName=dev-db"
+                                    ></button>
+
+                            </td>
+
+                    </tr>
+
+
+
+                    <tr class="admin-env-product-table-row" >
+
+                        <td>
+
+                                <input type="checkbox" class="admin-env-target-radio-select" name="targetRadioSelection"
+                                    value="9.3.35.1.1"
+                                    target-url="/admin/adminEnv/selectTarget?envName=NEW-DEV&envDesc=New-DEV+Environment&productId=BNR_GEN&applicationName=dev-db"
+                                />
+
+                        </td>
+                        <td class="td-action">
+
+                            <button class="table-link doc-link admin-main-nav-node"
+                                target-url="/admin/adminEnv/releaseDocs?envName=NEW-DEV&relVersion=9.3.35.1.1&productId=BNR_GEN&applicationName=dev-db&availRelProductId=BNR_GEN"
+                            ></button>
+
+                        </td>
+                        <td>9.3.35.1.1 </td>
+                        <td>2025-07-17 00:00:01.0</td>
+
+                            <td class="td-action">
+
+                                    <button class="table-link doc-link admin-env-upgrade-props-node"
+                                            target-url="/admin/adminEnv/upgradeSpecificProperties?envName=NEW-DEV&relVersion=9.3.35.1.1&productId=BNR_GEN&origin=availableReleases&applicationName=dev-db"
+                                    ></button>
+
+                            </td>
+
+                    </tr>
+
+
+
+                    <tr class="admin-env-product-table-row" >
+
+                        <td>
+
+                                <input type="checkbox" class="admin-env-target-radio-select" name="targetRadioSelection"
+                                    value="8.25.2"
+                                    target-url="/admin/adminEnv/selectTarget?envName=NEW-DEV&envDesc=New-DEV+Environment&productId=BNR_GEN&applicationName=dev-db"
+                                />
+
+                        </td>
+                        <td class="td-action">
+
+                            <button class="table-link doc-link admin-main-nav-node"
+                                target-url="/admin/adminEnv/releaseDocs?envName=NEW-DEV&relVersion=8.25.2&productId=BNR_GEN&applicationName=dev-db&availRelProductId=BNR_GEN"
+                            ></button>
+
+                        </td>
+                        <td>8.25.2 </td>
+                        <td>2025-11-20 00:00:01.0</td>
+
+                            <td class="td-action">
+
+                                    <button class="table-link doc-check-link admin-env-upgrade-props-node"
+                                            target-url="/admin/adminEnv/upgradeSpecificProperties?envName=NEW-DEV&relVersion=8.25.2&productId=BNR_GEN&origin=availableReleases&applicationName=dev-db"
+                                    ></button>
+
+                            </td>
+
+                    </tr>
+
+
+
+                    <tr class="admin-env-product-table-row" >
+
+                        <td>
+
+                                <input type="checkbox" class="admin-env-target-radio-select" name="targetRadioSelection"
+                                    value="8.25.1"
+                                    target-url="/admin/adminEnv/selectTarget?envName=NEW-DEV&envDesc=New-DEV+Environment&productId=BNR_GEN&applicationName=dev-db"
+                                />
+
+                        </td>
+                        <td class="td-action">
+
+                            <button class="table-link doc-link admin-main-nav-node"
+                                target-url="/admin/adminEnv/releaseDocs?envName=NEW-DEV&relVersion=8.25.1&productId=BNR_GEN&applicationName=dev-db&availRelProductId=BNR_GEN"
+                            ></button>
+
+                        </td>
+                        <td>8.25.1 </td>
+                        <td>2025-10-16 00:00:01.0</td>
+
+                            <td class="td-action">
+
+                                    <button class="table-link doc-check-link admin-env-upgrade-props-node"
+                                            target-url="/admin/adminEnv/upgradeSpecificProperties?envName=NEW-DEV&relVersion=8.25.1&productId=BNR_GEN&origin=availableReleases&applicationName=dev-db"
+                                    ></button>
+
+                            </td>
+
+                    </tr>
+
+
+
+                    <tr class="admin-env-product-table-row" >
+
+                        <td>
+
+                                <input type="checkbox" class="admin-env-target-radio-select" name="targetRadioSelection"
+                                    value="8.25.0.1"
+                                    target-url="/admin/adminEnv/selectTarget?envName=NEW-DEV&envDesc=New-DEV+Environment&productId=BNR_GEN&applicationName=dev-db"
+                                />
+
+                        </td>
+                        <td class="td-action">
+
+                            <button class="table-link doc-link admin-main-nav-node"
+                                target-url="/admin/adminEnv/releaseDocs?envName=NEW-DEV&relVersion=8.25.0.1&productId=BNR_GEN&applicationName=dev-db&availRelProductId=BNR_GEN"
+                            ></button>
+
+                        </td>
+                        <td>8.25.0.1 </td>
+                        <td>2025-09-30 00:00:01.0</td>
+
+                            <td class="td-action">
+
+                                    <button class="table-link doc-link admin-env-upgrade-props-node"
+                                            target-url="/admin/adminEnv/upgradeSpecificProperties?envName=NEW-DEV&relVersion=8.25.0.1&productId=BNR_GEN&origin=availableReleases&applicationName=dev-db"
+                                    ></button>
+
+                            </td>
+
+                    </tr>
+
+
+
+                    <tr class="admin-env-product-table-row" >
+
+                        <td>
+
+                                <input type="checkbox" class="admin-env-target-radio-select" name="targetRadioSelection"
+                                    value="8.25"
+                                    target-url="/admin/adminEnv/selectTarget?envName=NEW-DEV&envDesc=New-DEV+Environment&productId=BNR_GEN&applicationName=dev-db"
+                                />
+
+                        </td>
+                        <td class="td-action">
+
+                            <button class="table-link doc-link admin-main-nav-node"
+                                target-url="/admin/adminEnv/releaseDocs?envName=NEW-DEV&relVersion=8.25&productId=BNR_GEN&applicationName=dev-db&availRelProductId=BNR_GEN"
+                            ></button>
+
+                        </td>
+                        <td>8.25 </td>
+                        <td>2025-09-26 00:00:01.0</td>
+
+                            <td class="td-action">
+
+                                    <button class="table-link doc-check-link admin-env-upgrade-props-node"
+                                            target-url="/admin/adminEnv/upgradeSpecificProperties?envName=NEW-DEV&relVersion=8.25&productId=BNR_GEN&origin=availableReleases&applicationName=dev-db"
+                                    ></button>
+
+                            </td>
+
+                    </tr>
+
+            </tbody>
+        </table>
+        </div>
+
+
+        </div>
+
+        <span class="shim"></span>
+        <div class="btn-container right">
+
+            <button id="okayBtn" class="inline-btn form-btn admin-env-product-select-target-btn"
+                target-url="/admin/adminEnv/products?envName=NEW-DEV&envDesc=New-DEV+Environment"
+                scroll-pos="509"
+            >OK</button>
+            <button class="inline-btn form-btn admin-env-product-select-target-btn"
+                target-url="/admin/adminEnv/clearTarget?envName=NEW-DEV&envDesc=New-DEV+Environment&productId=BNR_GEN&applicationName=dev-db"
+                scroll-pos="509"
+            >Clear Selection</button>
+        </div>
+        <span class="shim"></span>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function sortTable() {
+            var tableExists = document.getElementById("preReqTable");
+
+            if (tableExists != null) {
+                var shouldSwitch = false;
+                var switching = true;
+                /!* Make a loop that will continue until no switching has been done: *!/
+                while (switching) {
+                    var table = document.getElementById("preReqTable");
+                    switching = false;
+                    var rows = table.rows;
+                    var i, x, y;
+                    /!* Loop through all table rows (except the first, which contains table headers): *!/
+                    for (i = 1; i < (rows.length - 1); i++) {
+                        shouldSwitch = false;
+                        /!* Get the two elements you want to compare, one from current row and one from the next: *!/
+                        x = rows[i].getElementsByTagName("TD")[2];
+                        y = rows[i + 1].getElementsByTagName("TD")[2];
+                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    };
+                    if (shouldSwitch) {
+                        /!* If a switch has been marked, make the switch and mark that a switch has been done: *!/
+                        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                        switching = true;
+                    }
+                };
+            }
+        });
+    </script>
+</div>

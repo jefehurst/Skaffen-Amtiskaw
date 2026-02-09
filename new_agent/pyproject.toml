@@ -1,0 +1,60 @@
+[project]
+name = "sos"
+version = "0.1.0"
+description = "Son of Stibbons - AI Work Assistant"
+authors = [
+    {name = "Your Name", email = "your-email@example.com"}
+]
+readme = "README.md"
+requires-python = ">=3.12,<4.0"
+dependencies = [
+    "httpx (>=0.28.1,<0.29.0)",
+    "typer (>=0.20.0,<0.21.0)",
+    "rich (>=14.2.0,<15.0.0)",
+    "mcp-atlassian (>=0.11.10,<0.12.0)",
+]
+
+
+[project.scripts]
+lsq = "sos.cli:main"
+
+[tool.poetry]
+packages = [{include = "sos", from = "src"}]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[dependency-groups]
+dev = [
+    "pytest (>=9.0.1,<10.0.0)",
+    "pytest-httpx (>=0.36.0,<0.37.0)"
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# Exclude subprojects - they have their own test suites
+norecursedirs = ["esm-cli", "ellucian-support", "runner-support", "tmp", ".git"]
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+ignore = []
+
+[tool.ruff.lint.per-file-ignores]
+# Scripts modify sys.path before imports - this is intentional
+"**/scripts/*.py" = ["E402"]
+
+[tool.pyright]
+pythonVersion = "3.12"
+typeCheckingMode = "basic"
+exclude = [
+    "esm-cli",
+    "ellucian-support",
+    "runner-support",
+    "**/tmp",
+]
+# Ignore missing imports - dependencies are in poetry's venv which pre-commit can't see
+reportMissingImports = "none"

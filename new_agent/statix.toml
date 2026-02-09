@@ -1,0 +1,5 @@
+# Statix configuration
+# https://github.com/nerdypepper/statix
+
+# Ignore draft/idea files - these are WIP and may have lint issues
+ignore = ["ideas/"]

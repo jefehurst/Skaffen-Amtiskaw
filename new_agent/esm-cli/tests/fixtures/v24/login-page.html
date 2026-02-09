@@ -1,0 +1,82 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <link rel="shortcut icon" type="image/x-icon" href="/admin/assets/favicon-5447c6b10b8695d6c971a518a2d4ddc2.ico"/>
+    <title>Ellucian Solution Manager</title>
+    <link rel="stylesheet" href="/admin/assets/jquery-ui-1.10.4-0d6378a5e9faef72778d41a1537fdb7a.css" />
+    <link rel="stylesheet" href="/admin/assets/adminMain-0ac819eff1874d9a8c3d4fbdc1bba1a9.css" />
+    <script type="text/javascript" src="/admin/assets/adminMain-c244d15c78c6119dbbd7da7e5cccfdda.js" ></script>
+    <script type="text/javascript" src="/admin/assets/jquery-ui-1.10.4-04c2ce783e38c8c1a8d2b921502ec1f6.js" ></script>
+
+    <meta name="_csrf" content="950dd29c-2d64-459f-afbd-87cb36726ac3"/>
+    <!-- default header name is X-CSRF-TOKEN -->
+    <meta name="_csrf_header" content="X-XSRF-TOKEN"/>
+
+
+        <meta name="layout" content="adminHeaderFooter">
+
+
+</head>
+<body>
+
+<div id="app" class="gridContainer clearfix">
+    <!--------------------------------------------------------------------------->
+    <!-- HEADER -->
+    <!--------------------------------------------------------------------------->
+    <div id="header">
+        <img src="/admin/assets/e-logo-lg-74cf32860194238bc9e877f2b5a62be0.png" class="e-logo"/>
+        <img src="/admin/assets/logo-ellucian-d0189865bf95a624ee7da66b8be733fc.png" width="82" height="18" class="full-logo"/>
+        <ul id="global-links">
+
+            <li>
+                <a target="_esmadminhelp" href="/admin/help/help" class="help">
+                    Help
+                </a>
+            </li>
+        </ul>
+        <a id="hidden-timeout-link" href="/admin/adminMain/index"></a>
+        <h1 class="header-label">
+            ELLUCIAN SOLUTION MANAGER 24.2
+            (BUILD 20241122.181411</font>)
+        </h1>
+    </div>
+
+<div id="ajax-spinner"></div>
+<div id="main">
+    <div class='inner'>
+        <div class="main-content-header">Rio Hondo College Sign In</div>
+        <span class="shim"></span>
+
+
+
+        <form action='/admin/login/authenticate' method='POST' id='loginForm' class='cssform' autocomplete='off'>
+         <fieldset>
+            <div class="formitem-wrap">
+                <label for='username'>Username:</label>
+                <input type='text' class='text_' name='username' id='username'/>
+            </div>
+            <div class="formitem-wrap">
+                <label for='password'>Password:</label>
+                <input type='password' class='text_' name='password' id='password'/>
+            </div>
+        </fieldset>
+
+        <input type="hidden" name="_csrf" value="950dd29c-2d64-459f-afbd-87cb36726ac3"/>
+
+        <div class="btn-container right">
+            <input class="inline-btn form-btn" type='submit' id="submit" value='Sign In'/>
+        </div>
+
+        </form>
+    </div>
+</div>
+
+
+</div>
+
+</body>
+</html>

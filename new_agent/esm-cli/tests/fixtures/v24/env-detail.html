@@ -1,0 +1,145 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <link rel="shortcut icon" type="image/x-icon" href="/admin/assets/favicon-5447c6b10b8695d6c971a518a2d4ddc2.ico"/>
+    <title>Ellucian Solution Manager</title>
+    <link rel="stylesheet" href="/admin/assets/jquery-ui-1.10.4-0d6378a5e9faef72778d41a1537fdb7a.css" />
+    <link rel="stylesheet" href="/admin/assets/adminMain-0ac819eff1874d9a8c3d4fbdc1bba1a9.css" />
+    <script type="text/javascript" src="/admin/assets/adminMain-c244d15c78c6119dbbd7da7e5cccfdda.js" ></script>
+    <script type="text/javascript" src="/admin/assets/jquery-ui-1.10.4-04c2ce783e38c8c1a8d2b921502ec1f6.js" ></script>
+
+    <meta name="_csrf" content="950dd29c-2d64-459f-afbd-87cb36726ac3"/>
+    <!-- default header name is X-CSRF-TOKEN -->
+    <meta name="_csrf_header" content="X-XSRF-TOKEN"/>
+
+
+        <meta name="layout" content="adminHeaderFooter"/>
+        <script type="text/javascript">
+
+</script>
+
+
+</head>
+<body>
+
+<div id="app" class="gridContainer clearfix">
+    <!--------------------------------------------------------------------------->
+    <!-- HEADER -->
+    <!--------------------------------------------------------------------------->
+    <div id="header">
+        <img src="/admin/assets/e-logo-lg-74cf32860194238bc9e877f2b5a62be0.png" class="e-logo"/>
+        <img src="/admin/assets/logo-ellucian-d0189865bf95a624ee7da66b8be733fc.png" width="82" height="18" class="full-logo"/>
+        <ul id="global-links">
+
+            <li>
+                <!--Url converted to use a post to satisfy spring security logout requirements-->
+                <form id="formSignOut" method="POST" action="/admin/logout/index">
+                    <input type="hidden" name="_csrf" value="950dd29c-2d64-459f-afbd-87cb36726ac3"/>
+
+                    <a class="sign-out" href="javascript:document.getElementById('formSignOut').submit();">
+                        Sign Out (admin)
+                    </a>
+                </form>
+            </li>
+            <li>
+                <a class="license" target="_blank" href="/admin/adminMain/adminLicense">
+                    About
+                </a>
+            </li>
+
+            <li>
+                <a target="_esmadminhelp" href="/admin/help/help" class="help">
+                    Help
+                </a>
+            </li>
+        </ul>
+        <a id="hidden-timeout-link" href="/admin/adminMain/index"></a>
+        <h1 class="header-label">
+            ELLUCIAN SOLUTION MANAGER 24.2
+            (BUILD 20241122.181411</font>)
+        </h1>
+    </div>
+
+
+        <span class="shim"></span>
+
+        <div id="configurations">
+
+            <div id="nav-div">
+                <h2>
+                    <a href="/admin/adminMain/index">
+                    <img src="/admin/assets/home-3511e46a0a85550ab8c31687e32df061.gif" width="25" height="25"/>
+                    </a>
+                </h2>
+                <ul id="sortable" class="simple-list">
+
+                    <li>
+                        <a class="admin-main-nav-node" href="#"
+                            target-url="/admin/adminEnv/products?envName=NEW-DEV"
+                        >Products</a>
+                    </li>
+                    <li>
+                        <a class="admin-main-nav-node" href="#"
+                            target-url="/admin/adminEnv/installs?envName=NEW-DEV"
+                        >Upgrades</a>
+                    </li>
+                    <li>
+                        <a class="admin-main-nav-node" href="#"
+                            target-url="/admin/adminEnv/deployments?envName=NEW-DEV"
+                        >Deployments</a>
+                    </li>
+
+
+
+                        <li>
+                            <a class="admin-main-nav-node" href="#"
+                                target-url="/admin/adminEnv/settings?envName=NEW-DEV"
+                            >Env Settings</a>
+                        </li>
+
+                    <li>
+                        <a class="admin-main-nav-node" href="#"
+                            target-url="/admin/adminEnv/servers?envName=NEW-DEV"
+                        >Applications</a>
+                    </li>
+                    <li>
+                        <a class="admin-main-nav-node" href="#"
+                            target-url="/admin/adminEnv/appservers?envName=NEW-DEV"
+                        >App Servers</a>
+                    </li>
+                    <li>
+                        <a class="admin-main-nav-node" href="#"
+                            target-url="/admin/adminEnv/machines?envName=NEW-DEV"
+                        >Machines</a>
+                    </li>
+
+
+                        <li>
+                            <a class="admin-main-nav-node" href="#"
+                                target-url="/admin/adminEnv/credentials?envName=NEW-DEV"
+                            >Credentials</a>
+                        </li>
+
+
+                </ul>
+                <span class="shim"/>
+            </div>
+
+        </div>
+
+        <!-- Main Div will go here -->
+
+
+
+        <div id="ajax-spinner"></div>
+
+
+
+</div>
+
+</body>
+</html>

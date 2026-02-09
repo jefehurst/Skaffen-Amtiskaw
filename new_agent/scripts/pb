@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# pb - pipe to pastebin, get URL for Claude to fetch
+# Usage: cat file.groovy | pb
+#        pb < file.groovy
+#        command | pb
+
+set -euo pipefail
+
+# Try services in order of simplicity/reliability
+if command -v curl &>/dev/null; then
+  # ix.io is reliable and simple
+  url=$(curl -sF 'f:1=<-' ix.io 2>/dev/null)
+  if [[ -n "$url" ]]; then
+    echo "$url"
+    exit 0
+  fi
+
+  # Fallback to 0x0.st
+  url=$(curl -sF 'file=@-' 0x0.st 2>/dev/null)
+  if [[ -n "$url" ]]; then
+    echo "$url"
+    exit 0
+  fi
+elif command -v nc &>/dev/null; then
+  # termbin just needs netcat
+  url=$(nc termbin.com 9999 2>/dev/null)
+  if [[ -n "$url" ]]; then
+    echo "$url"
+    exit 0
+  fi
+fi
+
+echo "ERROR: Could not upload. Need curl or nc." >&2
+exit 1
