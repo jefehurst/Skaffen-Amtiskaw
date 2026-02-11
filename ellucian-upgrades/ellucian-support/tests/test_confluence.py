@@ -484,3 +484,27 @@ class TestRenderClientPage:
         # Module name should appear once in the Details table, plus once in synopsis
         # Count in table rows specifically: should only have 1 <p>BA FIN AID</p>
         assert html.count("<p>BA FIN AID</p>") == 1
+
+    def test_dual_track_releases_both_shown(self):
+        """Modules with both 8.x and 9.x releases show all — tracks are complementary."""
+        round_ = UpgradeRound(
+            title="Test",
+            cutoff_date="2026-01-01",
+            modules=[
+                UpgradeModule(
+                    name="BA CALBHR",
+                    releases=[
+                        Release(sys_id="a", number="PR1", short_description="BA CALBHR 8.28",
+                                target_ga_date="2026-01-15"),
+                        Release(sys_id="b", number="PR2", short_description="BA CALBHR 9.3.56",
+                                target_ga_date="2026-02-15"),
+                    ],
+                ),
+            ],
+        )
+        installed = {"BA CALBHR": "9.3.55.0.1"}
+        html = render_client_page(round_, installed, {})
+        # Both tracks should be shown — they are complementary
+        assert "8.28" in html
+        assert "9.3.56" in html
+        assert "9.3.55.0.1" in html

@@ -9,7 +9,7 @@
   },
   "IVC": {
     "bastion": "nixbastion-imperial",
-    "esm_host": "",
+    "esm_host": "10.222.33.236:8081",
     "space_id": "3045752836",
     "parent_id": "3767959568",
     "client_name": "IVC",
@@ -17,7 +17,7 @@
   },
   "Centenary": {
     "bastion": "linux-bastion.oci.centenary.edu",
-    "esm_host": "",
+    "esm_host": "192.168.150.52:8081",
     "space_id": "3113451524",
     "parent_id": "3773202438",
     "client_name": "Centenary",
