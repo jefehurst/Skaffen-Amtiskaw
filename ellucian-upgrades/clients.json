@@ -1,0 +1,82 @@
+{
+  "FHDA": {
+    "bastion": "nixbastion-fhda",
+    "esm_host": "esmnonprod.int.oci.fhda.edu",
+    "space_id": "3125084168",
+    "parent_id": "3615588492",
+    "client_name": "FHDA",
+    "baseline_page_id": "4141645825"
+  },
+  "IVC": {
+    "bastion": "nixbastion-imperial",
+    "esm_host": "",
+    "space_id": "3045752836",
+    "parent_id": "3767959568",
+    "client_name": "IVC",
+    "baseline_page_id": "4141645825"
+  },
+  "Centenary": {
+    "bastion": "linux-bastion.oci.centenary.edu",
+    "esm_host": "",
+    "space_id": "3113451524",
+    "parent_id": "3773202438",
+    "client_name": "Centenary",
+    "baseline_page_id": "4141645825"
+  },
+  "AVC": {
+    "bastion": "",
+    "esm_host": "",
+    "space_id": "2863104008",
+    "parent_id": "3897360389",
+    "client_name": "AVC",
+    "baseline_page_id": "4141645825"
+  },
+  "RioHondo": {
+    "bastion": "",
+    "esm_host": "",
+    "space_id": "3776905220",
+    "parent_id": "3935272991",
+    "client_name": "Rio Hondo",
+    "baseline_page_id": "4141645825"
+  },
+  "Sierra": {
+    "bastion": "",
+    "esm_host": "",
+    "space_id": "2866020389",
+    "parent_id": "",
+    "client_name": "Sierra College",
+    "baseline_page_id": "4141645825"
+  },
+  "Citrus": {
+    "bastion": "",
+    "esm_host": "",
+    "space_id": "2918547461",
+    "parent_id": "",
+    "client_name": "Citrus College",
+    "baseline_page_id": "4141645825"
+  },
+  "COS": {
+    "bastion": "",
+    "esm_host": "",
+    "space_id": "2889056340",
+    "parent_id": "",
+    "client_name": "College of the Sequoias",
+    "baseline_page_id": "4141645825"
+  },
+  "AHC": {
+    "bastion": "",
+    "esm_host": "",
+    "space_id": "2918547709",
+    "parent_id": "",
+    "client_name": "Allan Hancock",
+    "baseline_page_id": "4141645825"
+  },
+  "NO": {
+    "bastion": "",
+    "esm_host": "",
+    "space_id": "2853666823",
+    "parent_id": "",
+    "client_name": "North Orange",
+    "baseline_page_id": "4141645825"
+  }
+}

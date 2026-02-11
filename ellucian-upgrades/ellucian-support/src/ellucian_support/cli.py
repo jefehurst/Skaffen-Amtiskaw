@@ -983,14 +983,61 @@ def upgrades_publish(
         console.print(f"\n[green]Published {round_.title} successfully![/green]")
 
 
+def _load_client_config(client_key: str, config_path: Path = None) -> dict:
+    """Load client configuration from clients.json.
+
+    Searches for clients.json in the current directory and up to 3 parent
+    directories, or uses the explicit path if provided.
+
+    Args:
+        client_key: Client key (e.g., "FHDA", "IVC").
+        config_path: Optional explicit path to clients.json.
+
+    Returns:
+        Client config dict with space_id, parent_id, etc.
+
+    Raises:
+        typer.Exit: If config file not found or client key missing.
+    """
+    import json as json_mod
+
+    if config_path is None:
+        for parent in [Path.cwd()] + list(Path.cwd().parents)[:3]:
+            candidate = parent / "clients.json"
+            if candidate.exists():
+                config_path = candidate
+                break
+
+    if config_path is None or not config_path.exists():
+        console.print("[red]clients.json not found. Create one or use --config to specify path.[/red]")
+        raise typer.Exit(1)
+
+    try:
+        all_clients = json_mod.loads(config_path.read_text())
+    except Exception as e:
+        console.print(f"[red]Error reading {config_path}:[/red] {e}")
+        raise typer.Exit(1)
+
+    # Case-insensitive lookup
+    for key, cfg in all_clients.items():
+        if key.upper() == client_key.upper():
+            console.print(f"[dim]Loaded client config for {key} from {config_path}[/dim]")
+            return cfg
+
+    available = ", ".join(all_clients.keys())
+    console.print(f"[red]Client '{client_key}' not found in {config_path}. Available: {available}[/red]")
+    raise typer.Exit(1)
+
+
 @upgrades_app.command("client-publish")
 def upgrades_client_publish(
     input_file: Path = typer.Argument(..., help="JSON file from 'upgrades gather' (enriched)"),
-    client: str = typer.Option(..., "--client", help="Client name (e.g., 'FHDA')"),
+    client: str = typer.Option(..., "--client", help="Client key (e.g., 'FHDA', 'IVC')"),
     esm_versions: Path = typer.Option(..., "--esm-versions", help="JSON file with ESM installed versions"),
-    space_id: str = typer.Option(..., "--space-id", help="Client Confluence space ID"),
-    parent_id: str = typer.Option(..., "--parent-id", help="Parent page/folder ID in client space"),
-    baseline_page_id: str = typer.Option("", "--baseline-page-id", help="Baseline root page ID for detail links"),
+    config: Path = typer.Option(None, "--config", help="Path to clients.json (default: auto-detect)"),
+    space_id: str = typer.Option("", "--space-id", help="Override client Confluence space ID"),
+    parent_id: str = typer.Option("", "--parent-id", help="Override parent page/folder ID"),
+    baseline_page_id: str = typer.Option("", "--baseline-page-id", help="Override baseline root page ID"),
     dry_run: bool = typer.Option(False, "--dry-run", "-n", help="Generate HTML without creating pages"),
 ):
     """Publish a client-specific upgrade page to Confluence.
@@ -999,19 +1046,19 @@ def upgrades_client_publish(
     Release Date, Defect/Enhancement/Regulatory, Dependencies). Only includes
     modules the client has installed (from ESM versions file).
 
+    Client configuration (space_id, parent_id, baseline_page_id) is loaded
+    from clients.json. Override any value with explicit flags.
+
     The ESM versions file should be a JSON object mapping ESM product names
     to version strings, e.g.: {"Financial Aid": "9.3.56", "General DB": "9.40"}
 
     Examples:
 
         ellucian-support upgrades client-publish /tmp/spring2026_enriched.json \\
-          --client FHDA --esm-versions /tmp/esm_prod_versions.json \\
-          --space-id 3125084168 --parent-id 3615588492 \\
-          --baseline-page-id 4141645825
+          --client FHDA --esm-versions /tmp/esm_prod_versions.json
 
         ellucian-support upgrades client-publish /tmp/spring2026_enriched.json \\
-          --client FHDA --esm-versions /tmp/esm_prod_versions.json \\
-          --space-id 3125084168 --parent-id 3615588492 --dry-run
+          --client IVC --esm-versions /tmp/ivc_versions.json --dry-run
     """
     import json as json_mod
 
@@ -1020,6 +1067,19 @@ def upgrades_client_publish(
     from .upgrade import UpgradeRound, match_installed_versions
 
     load_env()
+
+    # Load client config from clients.json
+    client_cfg = _load_client_config(client, config)
+    client_name = client_cfg.get("client_name", client)
+
+    # Use config values, allow CLI flags to override
+    space_id = space_id or client_cfg.get("space_id", "")
+    parent_id = parent_id or client_cfg.get("parent_id", "")
+    baseline_page_id = baseline_page_id or client_cfg.get("baseline_page_id", "")
+
+    if not space_id or not parent_id:
+        console.print("[red]Missing space_id or parent_id — set in clients.json or pass --space-id/--parent-id[/red]")
+        raise typer.Exit(1)
 
     user = os.environ.get("ATLASSIAN_USER", "")
     token = os.environ.get("ATLASSIAN_API_TOKEN", "")
@@ -1065,15 +1125,15 @@ def upgrades_client_publish(
             console.print(f"[yellow]Warning: Could not fetch baseline links: {e}[/yellow]")
 
     # Render the client page
-    title = f"{client} {round_.title}"
-    body = render_client_page(round_, installed, detail_links, client_name=client)
+    title = f"{client_name} {round_.title}"
+    body = render_client_page(round_, installed, detail_links, client_name=client_name)
 
     console.print(f"\n[bold]Publishing: {title}[/bold]")
     console.print(f"[dim]Modules: {len(installed)} | Space: {space_id} | Parent: {parent_id}[/dim]")
 
     if dry_run:
         console.print("[yellow]DRY RUN — no pages will be created[/yellow]")
-        outfile = input_file.with_suffix(f".{client.lower()}.html")
+        outfile = input_file.with_suffix(f".{client_name.lower()}.html")
         outfile.write_text(body)
         console.print(f"[green]Client page HTML → {outfile}[/green]")
 
