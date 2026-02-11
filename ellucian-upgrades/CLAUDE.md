@@ -1,4 +1,49 @@
-# CLAUDE.md - Skaffen-Amtiskaw AI Work Assistant
+# Ellucian Upgrade Documentation Automation
+
+## First Thing Every Session — Connection Checklist
+
+Do ALL of these steps IN ORDER at the start of every session. Do NOT skip any.
+
+### Step 1: Load Memory
+- Read `~/.claude/projects/-Users-geoffhurst/memory/ellucian-upgrades.md`
+
+### Step 2: Prompt for VPN
+- Ask: "Please confirm you're connected to the VPN."
+- **Wait for user confirmation before proceeding** to any network checks.
+
+### Step 3: Atlassian API
+1. Read `local.env` to get `ATLASSIAN_USER`, `ATLASSIAN_API_TOKEN`, `ATLASSIAN_SITE`
+2. Health check: `curl -s -o /dev/null -w "%{http_code}" -u "$USER:$TOKEN" "https://$SITE/rest/api/3/myself"`
+3. If 200: note "Atlassian: connected"
+4. If not 200: warn user with HTTP status code
+
+### Step 4: SSH Tunnel (for ESM)
+1. Check: `lsof -ti :8443 2>/dev/null`
+2. If no tunnel:
+   - In tmux? `tmux split-window -d 'ssh -L 8443:esmnonprod.int.oci.fhda.edu:443 nixbastion-fhda'`
+   - Not in tmux? Tell user to start manually: `ssh -L 8443:esmnonprod.int.oci.fhda.edu:443 nixbastion-fhda`
+   - Wait for user confirmation that tunnel is up
+
+### Step 5: ESM
+1. Verify: `curl -sk -o /dev/null -w "%{http_code}" --connect-timeout 5 -H "Host: esmnonprod.int.oci.fhda.edu" https://localhost:8443/admin/`
+2. If 200/302: note "ESM: connected (via tunnel)"
+3. If fail: warn user — tunnel or VPN may be down
+
+### Step 6: Ellucian Support
+1. Ensure venv: if `/tmp/esm-venv/bin/python3.12` missing, create it:
+   `/opt/homebrew/bin/python3.12 -m venv /tmp/esm-venv && /tmp/esm-venv/bin/pip install -q httpx typer rich requests beautifulsoup4 lxml`
+2. Check: `cd ellucian-support && PYTHONPATH=src /tmp/esm-venv/bin/python3.12 -m ellucian_support.cli status`
+3. If valid: note "Ellucian Support: connected"
+4. If expired: report "Ellucian Support: session expired — MFA login needed" and ask for MFA code
+5. To login: `echo "<MFA_CODE>" | PYTHONPATH=src /tmp/esm-venv/bin/python3.12 -m ellucian_support.cli login -f`
+
+### Step 7: Print Summary
+Print a single status block:
+```
+Atlassian: connected | failed (HTTP xxx)
+ESM: connected (via tunnel) | not reachable
+Ellucian Support: connected | expired (MFA needed)
+```
 
 ## Quick Reference
 

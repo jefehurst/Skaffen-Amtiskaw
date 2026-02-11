@@ -39,7 +39,14 @@
     "Bash(just format:*)",
     "Bash(just install:*)",
     "Bash(direnv allow:*)",
-    "WebSearch"
+    "WebSearch",
+    "Bash(curl -s*apogeetelecom.atlassian.net*)",
+    "Bash(curl -sk*localhost:8443*)",
+    "Bash(lsof -ti*)",
+    "Bash(tmux split-window*)",
+    "Bash(tmux display-message*)",
+    "Bash(tmux list-panes*)",
+    "Bash(tmux capture-pane*)"
   ],
   "alwaysThinkingEnabled": false
 }

@@ -3,6 +3,7 @@
 import os
 from pathlib import Path
 
+import httpx
 import typer
 from rich.console import Console
 from rich.table import Table
@@ -793,6 +794,380 @@ def releases_export(
         console.print(f"[green]Exported {len(releases)} releases to {output}[/green]")
     else:
         console.print(json_str)
+
+
+# Upgrade documentation commands
+upgrades_app = typer.Typer(help="Upgrade documentation commands")
+app.add_typer(upgrades_app, name="upgrades")
+
+
+@upgrades_app.command("gather")
+def upgrades_gather(
+    title: str = typer.Argument(..., help="Upgrade round title (e.g., 'Spring 2026')"),
+    cutoff: str = typer.Option(..., "--cutoff", "-c", help="Cutoff date (YYYY-MM-DD)"),
+    since: str = typer.Option("", "--since", "-s", help="Since date for recent releases"),
+    enrich: bool = typer.Option(True, help="Fetch defects/enhancements/prerequisites"),
+    output: Path = typer.Option(None, "--output", "-o", help="Output file (default: stdout)"),
+    json_output: bool = typer.Option(True, "--json/--no-json", help="JSON output"),
+):
+    """Gather release data for an upgrade round.
+
+    Queries the ServiceNow Table API for upcoming and recent Banner releases,
+    filters out excluded patterns, groups by module, and optionally enriches
+    with defects/enhancements/prerequisites.
+
+    Examples:
+
+        ellucian-support upgrades gather "Spring 2026" --cutoff 2026-03-19 --since 2025-12-12
+
+        ellucian-support upgrades gather "Spring 2026" -c 2026-03-19 -s 2025-12-12 --no-enrich -o spring2026.json
+    """
+    from .upgrade import gather_upgrade_round
+
+    session = _require_session()
+
+    try:
+        round_ = gather_upgrade_round(
+            session,
+            title=title,
+            cutoff_date=cutoff,
+            since_date=since,
+            enrich=enrich,
+            progress_callback=lambda msg: console.print(f"[dim]{msg}[/dim]"),
+        )
+    except Exception as e:
+        console.print(f"[red]Error:[/red] {e}")
+        raise typer.Exit(1)
+
+    json_str = round_.to_json()
+
+    if output:
+        output.write_text(json_str)
+        console.print(
+            f"[green]Gathered {sum(len(m.releases) for m in round_.modules)} releases "
+            f"in {len(round_.modules)} modules → {output}[/green]"
+        )
+    else:
+        console.print(json_str)
+
+
+@upgrades_app.command("preview")
+def upgrades_preview(
+    input_file: Path = typer.Argument(..., help="JSON file from 'upgrades gather'"),
+):
+    """Preview what would be published (module list, page count, etc.).
+
+    Examples:
+
+        ellucian-support upgrades preview spring2026.json
+    """
+    from .upgrade import UpgradeRound
+
+    try:
+        data = input_file.read_text()
+        round_ = UpgradeRound.from_json(data)
+    except Exception as e:
+        console.print(f"[red]Error reading {input_file}:[/red] {e}")
+        raise typer.Exit(1)
+
+    console.print(f"\n[bold]{round_.title}[/bold]")
+    console.print(f"[dim]Cutoff: {round_.cutoff_date} | Since: {round_.since_date or 'N/A'}[/dim]")
+    console.print(f"[dim]Modules: {len(round_.modules)} | Total releases: {sum(len(m.releases) for m in round_.modules)}[/dim]\n")
+
+    table = Table(show_header=True, header_style="bold")
+    table.add_column("#", style="dim", width=3)
+    table.add_column("Module", width=30)
+    table.add_column("Versions", width=25)
+    table.add_column("Releases", width=4)
+    table.add_column("Defects", width=4)
+    table.add_column("Enhancements", width=4)
+    table.add_column("Prerequisites", width=4)
+
+    from .confluence import _version_from_short_desc
+
+    for i, mod in enumerate(round_.modules, 1):
+        versions = "/".join(
+            _version_from_short_desc(r.short_description)
+            for r in mod.releases
+        )
+        defects = sum(len(r.defects) for r in mod.releases)
+        enhancements = sum(len(r.enhancements) for r in mod.releases)
+        prereqs = sum(len(r.prerequisites) for r in mod.releases)
+        table.add_row(
+            str(i), mod.name, versions,
+            str(len(mod.releases)), str(defects), str(enhancements), str(prereqs),
+        )
+
+    console.print(table)
+    console.print(f"\n[dim]Would create 1 root page + {len(round_.modules)} detail pages[/dim]")
+
+
+@upgrades_app.command("publish")
+def upgrades_publish(
+    input_file: Path = typer.Argument(..., help="JSON file from 'upgrades gather'"),
+    space_id: str = typer.Option(..., "--space-id", help="Confluence space ID"),
+    parent_id: str = typer.Option(..., "--parent-id", help="Parent page/folder ID"),
+    dry_run: bool = typer.Option(False, "--dry-run", "-n", help="Generate HTML without creating pages"),
+):
+    """Publish upgrade round to Confluence.
+
+    Creates a root page with Details table and child detail pages per module.
+
+    Examples:
+
+        ellucian-support upgrades publish spring2026.json --space-id 3096510467 --parent-id 3606609928
+
+        ellucian-support upgrades publish spring2026.json --space-id 3096510467 --parent-id 3606609928 --dry-run
+    """
+    from .confluence import publish_upgrade_round
+    from .upgrade import UpgradeRound
+
+    load_env()
+
+    user = os.environ.get("ATLASSIAN_USER", "")
+    token = os.environ.get("ATLASSIAN_API_TOKEN", "")
+    site = os.environ.get("ATLASSIAN_SITE", "")
+
+    if not all([user, token, site]):
+        console.print("[red]Missing ATLASSIAN_USER, ATLASSIAN_API_TOKEN, or ATLASSIAN_SITE in local.env[/red]")
+        raise typer.Exit(1)
+
+    try:
+        data = input_file.read_text()
+        round_ = UpgradeRound.from_json(data)
+    except Exception as e:
+        console.print(f"[red]Error reading {input_file}:[/red] {e}")
+        raise typer.Exit(1)
+
+    console.print(f"[bold]Publishing: {round_.title}[/bold]")
+    console.print(f"[dim]Modules: {len(round_.modules)} | Space: {space_id} | Parent: {parent_id}[/dim]")
+
+    if dry_run:
+        console.print("[yellow]DRY RUN — no pages will be created[/yellow]")
+
+    try:
+        result = publish_upgrade_round(
+            round_,
+            space_id=space_id,
+            parent_id=parent_id,
+            user=user,
+            token=token,
+            site=site,
+            dry_run=dry_run,
+            progress_callback=lambda msg: console.print(f"[dim]{msg}[/dim]"),
+        )
+    except Exception as e:
+        console.print(f"[red]Error:[/red] {e}")
+        raise typer.Exit(1)
+
+    if dry_run:
+        import json as json_mod
+
+        # Write generated HTML to files for inspection
+        root = result.get("root_page", {})
+        if root.get("html"):
+            outfile = input_file.with_suffix(".root.html")
+            outfile.write_text(root["html"])
+            console.print(f"[green]Root page HTML → {outfile}[/green]")
+
+        for detail in result.get("detail_pages", []):
+            safe_name = detail["title"].replace("/", "_").replace(" ", "_")
+            outfile = input_file.parent / f"{safe_name}.html"
+            outfile.write_text(detail["html"])
+            console.print(f"[green]Detail HTML → {outfile}[/green]")
+    else:
+        root = result.get("root_page", {})
+        console.print(f"\n[green]Root page:[/green] {root.get('url', root.get('id', ''))}")
+        for detail in result.get("detail_pages", []):
+            console.print(f"[green]  {detail['title']}:[/green] {detail.get('url', detail.get('id', ''))}")
+        console.print(f"\n[green]Published {round_.title} successfully![/green]")
+
+
+@upgrades_app.command("client-publish")
+def upgrades_client_publish(
+    input_file: Path = typer.Argument(..., help="JSON file from 'upgrades gather' (enriched)"),
+    client: str = typer.Option(..., "--client", help="Client name (e.g., 'FHDA')"),
+    esm_versions: Path = typer.Option(..., "--esm-versions", help="JSON file with ESM installed versions"),
+    space_id: str = typer.Option(..., "--space-id", help="Client Confluence space ID"),
+    parent_id: str = typer.Option(..., "--parent-id", help="Parent page/folder ID in client space"),
+    baseline_page_id: str = typer.Option("", "--baseline-page-id", help="Baseline root page ID for detail links"),
+    dry_run: bool = typer.Option(False, "--dry-run", "-n", help="Generate HTML without creating pages"),
+):
+    """Publish a client-specific upgrade page to Confluence.
+
+    Creates a flat page with 6 columns (Module, Current Version, Latest Version,
+    Release Date, Defect/Enhancement/Regulatory, Dependencies). Only includes
+    modules the client has installed (from ESM versions file).
+
+    The ESM versions file should be a JSON object mapping ESM product names
+    to version strings, e.g.: {"Financial Aid": "9.3.56", "General DB": "9.40"}
+
+    Examples:
+
+        ellucian-support upgrades client-publish /tmp/spring2026_enriched.json \\
+          --client FHDA --esm-versions /tmp/esm_prod_versions.json \\
+          --space-id 3125084168 --parent-id 3615588492 \\
+          --baseline-page-id 4141645825
+
+        ellucian-support upgrades client-publish /tmp/spring2026_enriched.json \\
+          --client FHDA --esm-versions /tmp/esm_prod_versions.json \\
+          --space-id 3125084168 --parent-id 3615588492 --dry-run
+    """
+    import json as json_mod
+
+    from .confluence import create_page as conf_create_page
+    from .confluence import render_client_page
+    from .upgrade import UpgradeRound, match_installed_versions
+
+    load_env()
+
+    user = os.environ.get("ATLASSIAN_USER", "")
+    token = os.environ.get("ATLASSIAN_API_TOKEN", "")
+    site = os.environ.get("ATLASSIAN_SITE", "")
+
+    if not dry_run and not all([user, token, site]):
+        console.print("[red]Missing ATLASSIAN_USER, ATLASSIAN_API_TOKEN, or ATLASSIAN_SITE in local.env[/red]")
+        raise typer.Exit(1)
+
+    # Load enriched upgrade round
+    try:
+        data = input_file.read_text()
+        round_ = UpgradeRound.from_json(data)
+    except Exception as e:
+        console.print(f"[red]Error reading {input_file}:[/red] {e}")
+        raise typer.Exit(1)
+
+    # Load ESM versions
+    try:
+        esm_data = json_mod.loads(esm_versions.read_text())
+    except Exception as e:
+        console.print(f"[red]Error reading ESM versions {esm_versions}:[/red] {e}")
+        raise typer.Exit(1)
+
+    # Match ESM products to modules
+    installed = match_installed_versions(esm_data, round_)
+    console.print(f"[dim]Matched {len(installed)} of {len(esm_data)} ESM products to upgrade modules[/dim]")
+
+    if not installed:
+        console.print("[yellow]No ESM products matched any modules in the upgrade round[/yellow]")
+        raise typer.Exit(0)
+
+    # Fetch baseline detail links if baseline page ID provided
+    detail_links: dict[str, str] = {}
+    if baseline_page_id and not dry_run and all([user, token, site]):
+        console.print(f"[dim]Fetching baseline detail page links from {baseline_page_id}...[/dim]")
+        try:
+            detail_links = _fetch_baseline_detail_links(
+                baseline_page_id, user, token, site,
+            )
+            console.print(f"[dim]Found {len(detail_links)} detail page links[/dim]")
+        except Exception as e:
+            console.print(f"[yellow]Warning: Could not fetch baseline links: {e}[/yellow]")
+
+    # Render the client page
+    title = f"{client} {round_.title}"
+    body = render_client_page(round_, installed, detail_links, client_name=client)
+
+    console.print(f"\n[bold]Publishing: {title}[/bold]")
+    console.print(f"[dim]Modules: {len(installed)} | Space: {space_id} | Parent: {parent_id}[/dim]")
+
+    if dry_run:
+        console.print("[yellow]DRY RUN — no pages will be created[/yellow]")
+        outfile = input_file.with_suffix(f".{client.lower()}.html")
+        outfile.write_text(body)
+        console.print(f"[green]Client page HTML → {outfile}[/green]")
+
+        # Also show which modules matched
+        console.print(f"\n[bold]Installed modules ({len(installed)}):[/bold]")
+        for mod_name, ver in sorted(installed.items()):
+            console.print(f"  {mod_name}: {ver}")
+        return
+
+    # Create the page
+    try:
+        result = conf_create_page(
+            title, space_id, parent_id, body,
+            user, token, site,
+        )
+        page_url = result.get("_links", {}).get("tinyui", "")
+        if page_url and not page_url.startswith("http"):
+            page_url = f"https://{site}/wiki{page_url}"
+        console.print(f"\n[green]Created: {title}[/green]")
+        console.print(f"[green]URL: {page_url}[/green]")
+        console.print(f"[green]ID: {result.get('id', '')}[/green]")
+    except Exception as e:
+        console.print(f"[red]Error creating page:[/red] {e}")
+        raise typer.Exit(1)
+
+
+def _fetch_baseline_detail_links(
+    baseline_page_id: str,
+    user: str,
+    token: str,
+    site: str,
+) -> dict[str, str]:
+    """Fetch detail page links from the baseline root page's children.
+
+    Paginates through children and fetches each page individually to get
+    tinyui links (the children list endpoint doesn't include _links).
+
+    Returns a dict of module_name -> page URL for linking from client pages.
+    """
+    import base64
+
+    from .upgrade import parse_module_name
+
+    credentials = base64.b64encode(f"{user}:{token}".encode()).decode()
+    headers = {
+        "Authorization": f"Basic {credentials}",
+        "Accept": "application/json",
+    }
+
+    # Step 1: Collect all child page IDs and titles (with pagination)
+    children = []
+    url = f"https://{site}/wiki/api/v2/pages/{baseline_page_id}/children"
+    params = {"limit": 100}
+
+    with httpx.Client(timeout=60.0) as client:
+        while url:
+            resp = client.get(url, headers=headers, params=params)
+            if resp.status_code != 200:
+                break
+            data = resp.json()
+            children.extend(data.get("results", []))
+            # Follow pagination cursor
+            next_link = data.get("_links", {}).get("next", "")
+            if next_link:
+                url = f"https://{site}/wiki{next_link}" if not next_link.startswith("http") else next_link
+                params = {}  # cursor is embedded in the next URL
+            else:
+                url = None
+
+        # Step 2: Fetch tinyui for each child page
+        detail_links = {}
+        for child in children:
+            page_id = child.get("id", "")
+            title = child.get("title", "")
+            # Detail page titles may have slash-separated versions (e.g.
+            # "BA FIN AID 8.55 - REPOST/9.3.56.1/8.56"). Split on first
+            # slash before parsing so the module name extracts cleanly.
+            base_title = title.split("/")[0] if "/" in title else title
+            module_name = parse_module_name(base_title)
+            if not module_name or not page_id:
+                continue
+
+            page_url = f"https://{site}/wiki/api/v2/pages/{page_id}"
+            resp = client.get(page_url, headers=headers)
+            if resp.status_code == 200:
+                page_data = resp.json()
+                tinyui = page_data.get("_links", {}).get("tinyui", "")
+                if tinyui and not tinyui.startswith("http"):
+                    base = page_data.get("_links", {}).get("base", f"https://{site}/wiki")
+                    tinyui = f"{base}{tinyui}"
+                if tinyui:
+                    detail_links[module_name] = tinyui
+
+    return detail_links
 
 
 def main():

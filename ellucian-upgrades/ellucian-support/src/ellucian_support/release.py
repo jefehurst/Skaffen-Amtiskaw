@@ -112,8 +112,16 @@ class Release:
     product_name: str = ""
     version: str = ""
     url: str = ""
+    target_ga_date: str = ""
+    description: str = ""
+    summary: str = ""
+    release_purpose: str = ""
+    product_hierarchy: str = ""
+    release_documentation: str = ""
+    state: str = ""
     defects: list[Defect] = field(default_factory=list)
     enhancements: list[Enhancement] = field(default_factory=list)
+    prerequisites: list[str] = field(default_factory=list)
 
     @classmethod
     def from_search_result(cls, raw: dict[str, Any]) -> "Release":
@@ -160,6 +168,37 @@ class Release:
             product_name=product_name,
             version=version,
             url=data.get("community_url", ""),
+            target_ga_date=data.get("target_ga_date", ""),
+            description=data.get("description", ""),
+            summary=data.get("summary", ""),
+            release_purpose=data.get("release_purpose", ""),
+            product_hierarchy=data.get("ellucian_product_full_hierarchy", ""),
+            release_documentation=data.get("release_documentation", ""),
+            state=data.get("state", ""),
+        )
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> "Release":
+        """Create from JSON dict (deserialization of to_dict output)."""
+        return cls(
+            sys_id=data.get("sys_id", ""),
+            number=data.get("number", ""),
+            short_description=data.get("short_description", ""),
+            date_released=data.get("date_released", ""),
+            product_line=data.get("product_line", ""),
+            product_name=data.get("product_name", ""),
+            version=data.get("version", ""),
+            url=data.get("url", ""),
+            target_ga_date=data.get("target_ga_date", ""),
+            description=data.get("description", ""),
+            summary=data.get("summary", ""),
+            release_purpose=data.get("release_purpose", ""),
+            product_hierarchy=data.get("product_hierarchy", ""),
+            release_documentation=data.get("release_documentation", ""),
+            state=data.get("state", ""),
+            defects=[Defect(**d) for d in data.get("defects", [])],
+            enhancements=[Enhancement(**e) for e in data.get("enhancements", [])],
+            prerequisites=data.get("prerequisites", []),
         )
 
     def to_dict(self) -> dict[str, Any]:
@@ -173,9 +212,75 @@ class Release:
             "product_name": self.product_name,
             "version": self.version,
             "url": self.url,
+            "target_ga_date": self.target_ga_date,
+            "description": self.description,
+            "summary": self.summary,
+            "release_purpose": self.release_purpose,
+            "product_hierarchy": self.product_hierarchy,
+            "release_documentation": self.release_documentation,
+            "state": self.state,
             "defects": [d.to_dict() for d in self.defects],
             "enhancements": [e.to_dict() for e in self.enhancements],
+            "prerequisites": self.prerequisites,
         }
+
+
+BANNER_PRODUCT_LINE_ID = "191904661b233c5440faa642604bcb96"
+
+DEFAULT_QUERY_FIELDS = (
+    "sys_id,number,short_description,ellucian_product_name,state,"
+    "target_ga_date,date_released,description,summary,release_purpose,"
+    "ellucian_product_full_hierarchy,release_documentation,"
+    "ellucian_product_line,ellucian_product_version,community_url"
+)
+
+
+def _make_client(session: AuthSession) -> httpx.Client:
+    """Create an httpx client with session cookies set."""
+    client = httpx.Client(timeout=30.0)
+    for name, value in session.cookies.items():
+        client.cookies.set(name, value, domain="elluciansupport.service-now.com")
+    return client
+
+
+def query_releases(
+    session: AuthSession,
+    query: str,
+    fields: str = DEFAULT_QUERY_FIELDS,
+    limit: int = 200,
+) -> list[Release]:
+    """Query releases via ServiceNow Table API with arbitrary filter.
+
+    Unlike search_releases() which uses Coveo, this queries the Table API
+    directly, enabling date-based filters and other ServiceNow query operators.
+
+    Args:
+        session: Authenticated session with cookies.
+        query: ServiceNow encoded query string (e.g.
+            "target_ga_date<=2026-03-19^ellucian_product_line=...").
+        fields: Comma-separated field names to return.
+        limit: Maximum results.
+
+    Returns:
+        List of Release objects (without defects/enhancements populated).
+
+    Raises:
+        ReleaseError: If query fails.
+    """
+    with _make_client(session) as client:
+        url = f"{SERVICENOW_BASE}/api/now/table/ellucian_product_release"
+        params = {
+            "sysparm_query": query,
+            "sysparm_fields": fields,
+            "sysparm_limit": str(limit),
+        }
+        resp = client.get(url, params=params, headers={"Accept": "application/json"})
+
+        if resp.status_code != 200:
+            raise ReleaseError(f"Release query failed: HTTP {resp.status_code}")
+
+        results = resp.json().get("result", [])
+        return [Release.from_api(r) for r in results]
 
 
 def search_releases(
@@ -243,14 +348,16 @@ def get_release(session: AuthSession, sys_id: str) -> Release:
         return Release.from_api(data)
 
 
-def _get_related_ids_from_page(client: httpx.Client, sys_id: str) -> tuple[list[str], list[str]]:
-    """Extract related defect/enhancement IDs from SP page API.
+def _get_related_ids_from_page(
+    client: httpx.Client, sys_id: str
+) -> tuple[list[str], list[str], list[str]]:
+    """Extract related defect/enhancement/prerequisite IDs from SP page API.
 
     The ServiceNow Service Portal page contains widget data with related
     item IDs embedded in filter strings like "sys_idINabc,def,ghi".
 
     Returns:
-        Tuple of (defect_ids, enhancement_ids).
+        Tuple of (defect_ids, enhancement_ids, prerequisite_ids).
     """
     sp_url = f"{SERVICENOW_BASE}/api/now/sp/page"
     params = {
@@ -261,11 +368,12 @@ def _get_related_ids_from_page(client: httpx.Client, sys_id: str) -> tuple[list[
     resp = client.get(sp_url, params=params, headers={"Accept": "application/json"})
 
     if resp.status_code != 200:
-        return [], []
+        return [], [], []
 
     data = resp.json()
     defect_ids = []
     enhancement_ids = []
+    prerequisite_ids = []
 
     # Navigate to Standard Ticket Tab widget
     containers = data.get("result", {}).get("containers", [])
@@ -290,8 +398,10 @@ def _get_related_ids_from_page(client: httpx.Client, sys_id: str) -> tuple[list[
                                     defect_ids.extend(ids)
                                 elif "Enhancement" in name:
                                     enhancement_ids.extend(ids)
+                                elif "Prerequisite" in name:
+                                    prerequisite_ids.extend(ids)
 
-    return defect_ids, enhancement_ids
+    return defect_ids, enhancement_ids, prerequisite_ids
 
 
 def _fetch_defects(client: httpx.Client, sys_ids: list[str]) -> list[Defect]:
@@ -318,8 +428,27 @@ def _fetch_enhancements(client: httpx.Client, sys_ids: list[str]) -> list[Enhanc
     return results
 
 
+def _fetch_prerequisites(client: httpx.Client, sys_ids: list[str]) -> list[str]:
+    """Fetch prerequisite release short_descriptions by sys_ids.
+
+    Returns just the short_description strings (e.g. "BA GENERAL 8.25")
+    since that's all we need for the Dependencies column.
+    """
+    results = []
+    for sys_id in sys_ids:
+        url = f"{SERVICENOW_BASE}/api/now/table/ellucian_product_release/{sys_id}"
+        params = {"sysparm_fields": "short_description"}
+        resp = client.get(url, params=params, headers={"Accept": "application/json"})
+        if resp.status_code == 200:
+            data = resp.json().get("result", {})
+            desc = data.get("short_description", "")
+            if desc:
+                results.append(desc)
+    return results
+
+
 def enrich_release(session: AuthSession, release: Release) -> Release:
-    """Fetch and attach defects/enhancements to a release.
+    """Fetch and attach defects/enhancements/prerequisites to a release.
 
     Modifies the release in place and returns it.
 
@@ -328,7 +457,7 @@ def enrich_release(session: AuthSession, release: Release) -> Release:
         release: Release object to enrich.
 
     Returns:
-        The same Release object with defects/enhancements populated.
+        The same Release object with defects/enhancements/prerequisites populated.
 
     Raises:
         ReleaseError: If enrichment fails.
@@ -338,13 +467,17 @@ def enrich_release(session: AuthSession, release: Release) -> Release:
             client.cookies.set(name, value, domain="elluciansupport.service-now.com")
 
         # Get related item IDs from page
-        defect_ids, enhancement_ids = _get_related_ids_from_page(client, release.sys_id)
+        defect_ids, enhancement_ids, prerequisite_ids = _get_related_ids_from_page(
+            client, release.sys_id
+        )
 
         # Fetch details
         if defect_ids:
             release.defects = _fetch_defects(client, defect_ids)
         if enhancement_ids:
             release.enhancements = _fetch_enhancements(client, enhancement_ids)
+        if prerequisite_ids:
+            release.prerequisites = _fetch_prerequisites(client, prerequisite_ids)
 
     return release
 
