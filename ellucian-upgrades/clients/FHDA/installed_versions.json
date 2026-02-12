@@ -1,0 +1,21 @@
+{
+  "Accounts Receivable": "9.3.32.0.2",
+  "Application Navigator": "3.21",
+  "Business Process API": "9.3.41.0.4",
+  "CAL-B Financial Aid": "9.3.55.0.1",
+  "CAL-B Student": "9.3.39.2.1",
+  "Employee Self Service": "9.33.0.1",
+  "Event Publisher": "9.20",
+  "Finance": "9.3.38.0.5",
+  "Finance Self Service": "9.15",
+  "Financial Aid": "9.3.56.0.4",
+  "General": "9.3.37.0.5",
+  "General DB": "9.41",
+  "General Self Service": "9.24.0.1",
+  "HR": "9.3.37.0.4",
+  "Position Control": "9.3.29.0.3",
+  "Registration Self Service": "9.38",
+  "Student": "9.3.40.0.4",
+  "Student API": "9.40",
+  "Student Self Service": "9.33"
+}

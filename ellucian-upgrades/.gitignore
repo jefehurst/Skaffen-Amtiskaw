@@ -89,3 +89,6 @@ stage
 **/attachments/
 .cache/
 vpn/qemu-test/alpine-virt.qcow2
+
+# Ellucian download bundles (large binary artifacts)
+Banner_*/
