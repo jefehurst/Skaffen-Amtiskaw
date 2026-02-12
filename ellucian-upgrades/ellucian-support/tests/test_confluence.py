@@ -10,10 +10,12 @@ from ellucian_support.confluence import (
     _format_date,
     _release_type_label,
     _version_from_short_desc,
+    compute_client_status,
     create_page,
     render_client_page,
     render_detail_page,
     render_root_page,
+    render_status_page,
 )
 from ellucian_support.release import Defect, Enhancement, Release
 from ellucian_support.upgrade import UpgradeModule, UpgradeRound
@@ -508,3 +510,214 @@ class TestRenderClientPage:
         assert "8.28" in html
         assert "9.3.56" in html
         assert "9.3.55.0.1" in html
+
+
+# --- Status page tests ---
+
+
+class TestComputeClientStatus:
+    def test_all_current_is_green(self):
+        """Client with no releases behind should be green."""
+        round_ = UpgradeRound(
+            title="Test", cutoff_date="2026-01-01",
+            modules=[
+                UpgradeModule(name="BA FIN AID", releases=[
+                    Release(sys_id="a", number="PR1",
+                            short_description="BA FIN AID 9.3.57"),
+                ]),
+            ],
+        )
+        # Module exists but no releases are behind (empty installed = not matched)
+        status = compute_client_status(round_, {}, {})
+        assert status["weighted_score"] == 0
+        assert status["color"] == "green"
+
+    def test_behind_on_maintenance_is_yellow(self):
+        """Client behind on several maintenance releases scores yellow."""
+        round_ = UpgradeRound(
+            title="Test", cutoff_date="2026-01-01",
+            modules=[
+                UpgradeModule(name="BA GENERAL", releases=[
+                    Release(sys_id="a", number="PR1",
+                            short_description="BA GENERAL 8.27",
+                            defects=[Defect(sys_id="d1", number="PD1", summary="fix")]),
+                ]),
+                UpgradeModule(name="BA HR", releases=[
+                    Release(sys_id="b", number="PR2",
+                            short_description="BA HR 8.34",
+                            enhancements=[Enhancement(sys_id="e1", number="EN1", summary="feat")]),
+                ]),
+                UpgradeModule(name="BA POS CONT", releases=[
+                    Release(sys_id="c", number="PR3",
+                            short_description="BA POS CONT 9.3.30"),
+                ]),
+                UpgradeModule(name="BA FIN AID", releases=[
+                    Release(sys_id="d", number="PR4",
+                            short_description="BA FIN AID 9.3.57",
+                            defects=[Defect(sys_id="d2", number="PD2", summary="fix2")]),
+                ]),
+                UpgradeModule(name="BA GENERAL CMN DB", releases=[
+                    Release(sys_id="e", number="PR5",
+                            short_description="BA GENERAL CMN DB 9.42"),
+                ]),
+                UpgradeModule(name="Banner Student", releases=[
+                    Release(sys_id="f", number="PR6",
+                            short_description="Banner Student 8.38",
+                            defects=[Defect(sys_id="d3", number="PD3", summary="fix3")]),
+                ]),
+            ],
+        )
+        installed = {
+            "BA GENERAL": "8.26", "BA HR": "8.33", "BA POS CONT": "9.3.29",
+            "BA FIN AID": "9.3.56", "BA GENERAL CMN DB": "9.41",
+            "Banner Student": "8.37",
+        }
+        status = compute_client_status(round_, installed, {})
+        assert status["behind_count"] == 6
+        assert status["color"] == "yellow"
+
+    def test_regulatory_behind_weights_3x(self):
+        """Regulatory releases behind count as 3x weight."""
+        round_ = UpgradeRound(
+            title="Test", cutoff_date="2026-01-01",
+            modules=[
+                UpgradeModule(name="BA FIN AID", releases=[
+                    Release(sys_id="a", number="PR1",
+                            short_description="BA FIN AID 9.3.57",
+                            release_purpose="regulatory",
+                            enhancements=[Enhancement(sys_id="e1", number="EN1", summary="COD")]),
+                ]),
+            ],
+        )
+        installed = {"BA FIN AID": "9.3.56"}
+        status = compute_client_status(round_, installed, {})
+        assert status["weighted_score"] == 3
+        assert status["modules_behind"][0]["weight"] == 3
+
+    def test_security_behind_weights_2x(self):
+        """Security/CVE releases behind count as 2x weight."""
+        round_ = UpgradeRound(
+            title="Test", cutoff_date="2026-01-01",
+            modules=[
+                UpgradeModule(name="BA GEN BUS PROC API", releases=[
+                    Release(sys_id="a", number="PR1",
+                            short_description="BA GEN BUS PROC API 9.3.41.1",
+                            defects=[Defect(sys_id="d1", number="PD1", summary="CVE-2025-66021")]),
+                ]),
+            ],
+        )
+        installed = {"BA GEN BUS PROC API": "9.3.40"}
+        status = compute_client_status(round_, installed, {})
+        assert status["weighted_score"] == 2
+        assert status["modules_behind"][0]["weight"] == 2
+
+    def test_client_page_link_in_details(self):
+        """Client page link is included in status details."""
+        round_ = UpgradeRound(
+            title="Test", cutoff_date="2026-01-01",
+            modules=[
+                UpgradeModule(name="BA FIN AID", releases=[
+                    Release(sys_id="a", number="PR1",
+                            short_description="BA FIN AID 9.3.57"),
+                ]),
+            ],
+        )
+        installed = {"BA FIN AID": "9.3.56"}
+        client_link = "https://example.com/wiki/x/ABC"
+        status = compute_client_status(round_, installed, {}, client_page_url=client_link)
+        assert status["client_page_url"] == client_link
+
+    def test_red_threshold(self):
+        """High weighted score should be red."""
+        round_ = UpgradeRound(
+            title="Test", cutoff_date="2026-01-01",
+            modules=[
+                UpgradeModule(name=f"MOD{i}", releases=[
+                    Release(sys_id=f"s{i}", number=f"PR{i}",
+                            short_description=f"MOD{i} 2.0",
+                            release_purpose="regulatory",
+                            enhancements=[Enhancement(sys_id=f"e{i}", number=f"EN{i}", summary="reg")]),
+                ])
+                for i in range(5)
+            ],
+        )
+        installed = {f"MOD{i}": "1.0" for i in range(5)}
+        status = compute_client_status(round_, installed, {})
+        # 5 regulatory modules * 3 = 15 weighted score → red
+        assert status["weighted_score"] == 15
+        assert status["color"] == "red"
+
+
+class TestRenderStatusPage:
+    def _make_statuses(self):
+        return [
+            {
+                "client_name": "FHDA",
+                "client_page_url": "https://example.com/fhda",
+                "total_modules": 19,
+                "behind_count": 2,
+                "weighted_score": 4,
+                "color": "green",
+                "modules_behind": [
+                    {"name": "BA FIN AID", "installed": "9.3.56", "latest": "9.3.57",
+                     "type_label": "Enhancement/Regulatory", "weight": 3},
+                    {"name": "BA GENERAL", "installed": "8.26", "latest": "8.27",
+                     "type_label": "Defect", "weight": 1},
+                ],
+            },
+            {
+                "client_name": "IVC",
+                "client_page_url": "https://example.com/ivc",
+                "total_modules": 19,
+                "behind_count": 8,
+                "weighted_score": 12,
+                "color": "yellow",
+                "modules_behind": [],
+            },
+            {
+                "client_name": "AVC",
+                "client_page_url": "https://example.com/avc",
+                "total_modules": 19,
+                "behind_count": 15,
+                "weighted_score": 20,
+                "color": "red",
+                "modules_behind": [],
+            },
+        ]
+
+    def test_contains_table_structure(self):
+        html = render_status_page(self._make_statuses(), "Spring 2026")
+        assert "<strong>Client</strong>" in html
+        assert "<strong>Status</strong>" in html
+        assert "<strong>Modules</strong>" in html
+        assert "<strong>Behind</strong>" in html
+
+    def test_contains_client_names_as_links(self):
+        html = render_status_page(self._make_statuses(), "Spring 2026")
+        assert 'href="https://example.com/fhda"' in html
+        assert ">FHDA</a>" in html
+
+    def test_green_status_lozenge(self):
+        html = render_status_page(self._make_statuses(), "Spring 2026")
+        assert 'ac:name="status"' in html
+        assert 'ac:parameter ac:name="colour">Green' in html
+
+    def test_yellow_status_lozenge(self):
+        html = render_status_page(self._make_statuses(), "Spring 2026")
+        assert 'ac:parameter ac:name="colour">Yellow' in html
+
+    def test_red_status_lozenge(self):
+        html = render_status_page(self._make_statuses(), "Spring 2026")
+        assert 'ac:parameter ac:name="colour">Red' in html
+
+    def test_expand_macro_for_behind_modules(self):
+        html = render_status_page(self._make_statuses(), "Spring 2026")
+        assert 'ac:name="expand"' in html
+        assert "BA FIN AID" in html
+        assert "9.3.56" in html
+        assert "9.3.57" in html
+
+    def test_title_in_page(self):
+        html = render_status_page(self._make_statuses(), "Spring 2026")
+        assert "Spring 2026" in html
+        assert "Upgrade Status" in html

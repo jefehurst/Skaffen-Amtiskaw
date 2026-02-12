@@ -342,6 +342,237 @@ def render_client_page(
     )
 
 
+# ---------------------------------------------------------------------------
+# Status page — cross-client upgrade posture dashboard
+# ---------------------------------------------------------------------------
+
+# Thresholds for weighted score → color
+_GREEN_MAX = 5
+_YELLOW_MAX = 12
+
+
+def _release_weight(release: Release) -> int:
+    """Determine the urgency weight for a release.
+
+    Returns:
+        3 for regulatory releases,
+        2 for security/CVE patches,
+        1 for normal maintenance.
+    """
+    if release.release_purpose and "regulatory" in release.release_purpose.lower():
+        return 3
+    # Check defect summaries for CVE patterns
+    for defect in release.defects:
+        if "CVE-" in defect.summary.upper():
+            return 2
+    return 1
+
+
+def compute_client_status(
+    round_: UpgradeRound,
+    installed_versions: dict[str, str],
+    detail_links: dict[str, str],
+    client_page_url: str = "",
+    client_name: str = "",
+) -> dict[str, Any]:
+    """Compute upgrade status for a single client.
+
+    Compares installed versions against the latest releases in the round
+    to determine which modules are behind and compute a weighted score.
+
+    Args:
+        round_: The upgrade round data.
+        installed_versions: Module name -> installed version string.
+        detail_links: Module name -> baseline detail page URL.
+        client_page_url: URL to the client's upgrade page.
+        client_name: Display name for the client.
+
+    Returns:
+        Dict with color, score, behind_count, modules_behind details.
+    """
+    installed_modules = [m for m in round_.modules if m.name in installed_versions]
+    modules_behind = []
+    weighted_score = 0
+
+    for module in installed_modules:
+        if not module.releases:
+            continue
+        # The last release is the latest (sorted by date in gather)
+        latest_release = module.releases[-1]
+        latest_version = _version_from_short_desc(latest_release.short_description)
+        current_version = installed_versions.get(module.name, "")
+
+        # Simple string comparison — if installed matches latest, they're current.
+        # Otherwise they're behind. We compare against ALL releases, not just latest,
+        # because the client may be on an intermediate version.
+        is_behind = current_version != latest_version
+
+        if is_behind:
+            # Use the highest weight across all releases for this module
+            weight = max(_release_weight(r) for r in module.releases)
+            type_label = _release_type_label(latest_release)
+            modules_behind.append({
+                "name": module.name,
+                "installed": current_version,
+                "latest": latest_version,
+                "type_label": type_label,
+                "weight": weight,
+                "detail_link": detail_links.get(module.name, ""),
+            })
+            weighted_score += weight
+
+    if weighted_score <= _GREEN_MAX:
+        color = "green"
+    elif weighted_score <= _YELLOW_MAX:
+        color = "yellow"
+    else:
+        color = "red"
+
+    return {
+        "client_name": client_name,
+        "client_page_url": client_page_url,
+        "total_modules": len(installed_modules),
+        "behind_count": len(modules_behind),
+        "weighted_score": weighted_score,
+        "color": color,
+        "modules_behind": modules_behind,
+    }
+
+
+def render_status_page(
+    client_statuses: list[dict[str, Any]],
+    round_title: str,
+) -> str:
+    """Generate Confluence storage format for the cross-client status dashboard.
+
+    Args:
+        client_statuses: List of dicts from compute_client_status().
+        round_title: e.g. "Spring 2026".
+
+    Returns:
+        Confluence storage format XML string.
+    """
+    color_map = {"green": "Green", "yellow": "Yellow", "red": "Red"}
+    label_map = {"green": "Current", "yellow": "Behind", "red": "At Risk"}
+
+    rows = []
+    for cs in client_statuses:
+        conf_color = color_map.get(cs["color"], "Grey")
+        conf_label = label_map.get(cs["color"], "Unknown")
+
+        # Client name as link to their upgrade page
+        name = escape(cs["client_name"])
+        if cs.get("client_page_url"):
+            name_cell = f'<a href="{escape(cs["client_page_url"])}">{name}</a>'
+        else:
+            name_cell = name
+
+        # Status lozenge using Confluence status macro
+        status_macro = (
+            f'<ac:structured-macro ac:name="status" ac:schema-version="1">'
+            f'<ac:parameter ac:name="colour">{conf_color}</ac:parameter>'
+            f'<ac:parameter ac:name="title">{conf_label}</ac:parameter>'
+            f'</ac:structured-macro>'
+        )
+
+        # Progress: up-to-date / total
+        up_to_date = cs["total_modules"] - cs["behind_count"]
+
+        # Expand macro with module-level detail
+        if cs["modules_behind"]:
+            detail_rows = []
+            for mb in cs["modules_behind"]:
+                w_label = ""
+                if mb["weight"] == 3:
+                    w_label = " (regulatory)"
+                elif mb["weight"] == 2:
+                    w_label = " (security)"
+                mod_name = escape(mb["name"])
+                if mb.get("detail_link"):
+                    mod_name = f'<a href="{escape(mb["detail_link"])}">{mod_name}</a>'
+                detail_rows.append(
+                    f'<tr>'
+                    f'<td><p>{mod_name}</p></td>'
+                    f'<td><p>{escape(mb["installed"])}</p></td>'
+                    f'<td><p>{escape(mb["latest"])}</p></td>'
+                    f'<td><p>{escape(mb["type_label"])}{escape(w_label)}</p></td>'
+                    f'</tr>'
+                )
+            detail_table = (
+                '<table data-table-width="760" data-layout="default">'
+                '<colgroup>'
+                '<col style="width: 200.0px;" />'
+                '<col style="width: 140.0px;" />'
+                '<col style="width: 140.0px;" />'
+                '<col style="width: 280.0px;" />'
+                '</colgroup>'
+                '<tbody>'
+                '<tr>'
+                '<th><p><strong>Module</strong></p></th>'
+                '<th><p><strong>Installed</strong></p></th>'
+                '<th><p><strong>Latest</strong></p></th>'
+                '<th><p><strong>Type</strong></p></th>'
+                '</tr>'
+                + "".join(detail_rows) +
+                '</tbody>'
+                '</table>'
+            )
+            expand_html = (
+                f'<ac:structured-macro ac:name="expand" ac:schema-version="1">'
+                f'<ac:parameter ac:name="title">{cs["behind_count"]} modules behind</ac:parameter>'
+                f'<ac:rich-text-body>'
+                f'{detail_table}'
+                f'</ac:rich-text-body>'
+                f'</ac:structured-macro>'
+            )
+        else:
+            expand_html = '<p />'
+
+        rows.append(
+            f'<tr>'
+            f'<td><p>{name_cell}</p></td>'
+            f'<td><p>{status_macro}</p></td>'
+            f'<td><p>{cs["total_modules"]}</p></td>'
+            f'<td><p>{cs["behind_count"]}</p></td>'
+            f'<td><p>{up_to_date}</p></td>'
+            f'<td><p>{cs["weighted_score"]}</p></td>'
+            f'<td>{expand_html}</td>'
+            f'</tr>'
+        )
+
+    rows_html = "".join(rows)
+
+    return (
+        f'<h2>Upgrade Status — {escape(round_title)}</h2>'
+        '<p>Weighted scoring: regulatory releases count 3x, '
+        'security/CVE patches count 2x, maintenance releases count 1x. '
+        'Green ≤ 5, Yellow 6-12, Red 13+.</p>'
+        '<table data-table-width="1200" data-layout="center">'
+        '<colgroup>'
+        '<col style="width: 160.0px;" />'
+        '<col style="width: 120.0px;" />'
+        '<col style="width: 90.0px;" />'
+        '<col style="width: 90.0px;" />'
+        '<col style="width: 110.0px;" />'
+        '<col style="width: 90.0px;" />'
+        '<col style="width: 340.0px;" />'
+        '</colgroup>'
+        '<tbody>'
+        '<tr>'
+        '<th><p><strong>Client</strong></p></th>'
+        '<th><p><strong>Status</strong></p></th>'
+        '<th><p><strong>Modules</strong></p></th>'
+        '<th><p><strong>Behind</strong></p></th>'
+        '<th><p><strong>Up to Date</strong></p></th>'
+        '<th><p><strong>Score</strong></p></th>'
+        '<th><p><strong>Details</strong></p></th>'
+        '</tr>'
+        f'{rows_html}'
+        '</tbody>'
+        '</table>'
+    )
+
+
 def _defect_link(defect: Defect) -> str:
     """Build a link to the defect in Ellucian Support."""
     url = (
